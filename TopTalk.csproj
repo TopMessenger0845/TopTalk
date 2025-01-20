@@ -8,4 +8,15 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="NetworkCore\**" />
+    <EmbeddedResource Remove="NetworkCore\**" />
+    <None Remove="NetworkCore\**" />
+    <Page Remove="NetworkCore\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_GlobalJsonStartingDir Remove="NetworkCore\**" />
+  </ItemGroup>
+
 </Project>
