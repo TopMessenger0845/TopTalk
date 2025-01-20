@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopTalk", "TopTalk.csproj", "{4F7B5694-B1A2-4A42-89BF-A3772D39CF5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F7B5694-B1A2-4A42-89BF-A3772D39CF5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F7B5694-B1A2-4A42-89BF-A3772D39CF5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F7B5694-B1A2-4A42-89BF-A3772D39CF5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F7B5694-B1A2-4A42-89BF-A3772D39CF5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {33CBD6E3-804F-4130-AB2A-896AD63FC5A8}
+	EndGlobalSection
+EndGlobal
