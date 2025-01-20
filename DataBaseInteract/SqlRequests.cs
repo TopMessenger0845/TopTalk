@@ -59,8 +59,7 @@ namespace TopTalk.DataBaseInteract
                 db.SaveChanges();
             }
         }
-        public static void AddMessage(User fromMsg, FileInfo file, Chat chat)//хз как у нас будет обработка и отправка файлов
-                                                                             //пусть пока так, набросок
+        public static void AddMessage(User fromMsg, FileInfo file, Chat chat)//хз как у нас будет обработка и отправка файлов пусть пока так, набросок
         { 
             using (MainContext db = new MainContext())
             {
@@ -74,7 +73,20 @@ namespace TopTalk.DataBaseInteract
                 db.SaveChanges();
             }
         }
-        public static void DeleteMessage() { }
+        public static void DeleteMessage(int msgId) 
+        {
+            using(var db = new MainContext())
+            {
+                Message neededMsg = db.Messages.Where(u => u.Id == msgId).FirstOrDefault();
+                if (neededMsg != null)
+                {
+                    db.Messages.Remove(neededMsg);
+                    db.SaveChanges();
+                }
+                else
+                    throw new NullReferenceException();
+            }
+        }
         public static void CreateChat() { }
         public static void DeleteChat() { }
 
