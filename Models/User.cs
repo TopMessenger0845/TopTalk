@@ -10,7 +10,7 @@ namespace TopTalk.Models
     {
         public int Id { get; set; }
         public string Login { get; set; }
-        public string PasswordHash { get; set; }
+        public int PasswordHash { get; set; }
         public int UserTypeId { get; set; }
         public ICollection<Chat> Chats { get; set; }
         public TypesOfUsers UserType {  get; set; }
