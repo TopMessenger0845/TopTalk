@@ -10,9 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="NetworkCore\**" />
+    <Compile Remove="TopTalk.Core\**" />
     <EmbeddedResource Remove="NetworkCore\**" />
+    <EmbeddedResource Remove="TopTalk.Core\**" />
     <None Remove="NetworkCore\**" />
+    <None Remove="TopTalk.Core\**" />
     <Page Remove="NetworkCore\**" />
+    <Page Remove="TopTalk.Core\**" />
   </ItemGroup>
 
   <ItemGroup>
