@@ -27,7 +27,6 @@ namespace TopTalk.DataBaseInteract
         {
             modelBuilder.Entity<Chat>().HasMany(u => u.Users).WithMany(u => u.Chats);
             modelBuilder.Entity<Message>().HasOne(u => u.Chat).WithMany(u => u.Messages).HasForeignKey(u=>u.ChatId);
-            modelBuilder.Entity<User>().ToTable(t => t.HasCheckConstraint("ValidData", "Password AND Age < 120"));
         }
     }
 }
