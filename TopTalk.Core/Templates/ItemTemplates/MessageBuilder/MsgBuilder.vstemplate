@@ -1,0 +1,14 @@
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+	<TemplateData>
+		<Name>Message Builder Template</Name>
+		<Description>Template for creating message builders with specific title replacement.</Description>
+		<DefaultName>NewMessageBuilder</DefaultName>
+		<ProjectType>CSharp</ProjectType>
+		<SortOrder>10</SortOrder>
+		<Icon>icon.png</Icon>
+		<!-- Можно удалить, если иконка не используется -->
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem SubType="" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">MessageBuilder.cs</ProjectItem>
+	</TemplateContent>
+</VSTemplate>

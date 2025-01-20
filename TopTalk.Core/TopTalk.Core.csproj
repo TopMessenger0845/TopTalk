@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Models\MessageBuilder\Messages\DeleteMessageResponse.cs" />
+    <Compile Remove="Templates\ItemTemplates\MessageBuilder\MessageBuilder.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\ItemTemplates\MessageBuilder\MsgBuilder.vstemplate" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +21,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Network.Core\TopNetwork.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+    <Folder Include="Templates\ItemTemplates\" />
+    <Folder Include="Templates\ItemTemplates\MessageBuilder\" />
   </ItemGroup>
 
 </Project>

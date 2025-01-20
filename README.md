@@ -1,6 +1,18 @@
 # Command Protocol Documentation
+Этот документ предоставляет полный обзор всех доступных команд, сгруппированных по категориям, а также описание соответствующих пар команд Request и Response. Для удобства разработчиков, добавлен шаблон для быстрого построения сообщений — Message Builder Template.
 
-This document provides an overview of all available commands, organized by category, and pairs corresponding `Request` and `Response` commands.
+## 0. Установка шаблонов для разработчиков
+Для того чтобы быстро импортировать шаблон **Message Builder Template**, выполните следующие шаги:
+
+1. Откройте **Командную строку разработчика**:
+   - В Visual Studio откройте меню **Средства (Tools)**.
+   - Выберите **Командная строка** и затем **Разработчика**.
+
+2. В командной строке выполните следующую команду для установки шаблонов:
+
+   ```powershell
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File "./TopTalk.Core/Scripts/InstallTemplates.ps1"
+
 
 ## Chats
 
@@ -35,6 +47,6 @@ This document provides an overview of all available commands, organized by categ
 | RegisterRequest.cs | RegisterResponse.cs |
 
 ### Note
-Some additional files that do not follow the `Request`/`Response` pattern:
+Некоторые дополнительные файлы, которые не следуют шаблону `Request`/`Response`:
 
 - **Chats**: AnswerOfInvitation.cs, InviteUserNotification.cs
