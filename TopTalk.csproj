@@ -9,18 +9,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Network.Core\**" />
     <Compile Remove="NetworkCore\**" />
     <Compile Remove="TopTalk.Core\**" />
+    <EmbeddedResource Remove="Network.Core\**" />
     <EmbeddedResource Remove="NetworkCore\**" />
     <EmbeddedResource Remove="TopTalk.Core\**" />
+    <None Remove="Network.Core\**" />
     <None Remove="NetworkCore\**" />
     <None Remove="TopTalk.Core\**" />
+    <Page Remove="Network.Core\**" />
     <Page Remove="NetworkCore\**" />
     <Page Remove="TopTalk.Core\**" />
   </ItemGroup>
 
   <ItemGroup>
     <_GlobalJsonStartingDir Remove="NetworkCore\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="Network.Core\TopNetwork.csproj" />
+    <ProjectReference Include="TopTalk.Core\TopTalk.Core.csproj" />
   </ItemGroup>
 
 </Project>
