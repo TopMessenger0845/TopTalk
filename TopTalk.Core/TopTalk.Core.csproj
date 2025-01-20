@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\MessageBuilder\Messages\DeleteMessageResponse.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Models\MessageBuilder\Messages\DeleteMessageResponse.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Network.Core\TopNetwork.csproj" />
   </ItemGroup>
 
