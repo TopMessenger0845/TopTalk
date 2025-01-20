@@ -32,6 +32,7 @@ namespace TopTalk.DataBaseInteract
                 {
                     Login = login,
                     PasswordHash = passwordHash,
+                    UserType = type
                 };
                 var users = db.Users.Where(u => u.Login == login && u.PasswordHash == passwordHash).Select(u => u);
                 if (users.Count() != 0)
@@ -77,7 +78,7 @@ namespace TopTalk.DataBaseInteract
         {
             using(var db = new MainContext())
             {
-                Message neededMsg = db.Messages.Where(u => u.Id == msgId).FirstOrDefault();
+                Message neededMsg = db.Messages.Where(u => u.Id == msgId).FirstOrDefault()!;
                 if (neededMsg != null)
                 {
                     db.Messages.Remove(neededMsg);
