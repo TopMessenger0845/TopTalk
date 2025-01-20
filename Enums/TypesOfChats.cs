@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TopTalk.Models
+namespace TopTalk.Enums
 {
-    public class TypeOfChat
+    public enum TypesOfChats
     {
-        public int Id { get; set; }
-        public string Type { get; set; }
+        Public,
+        Private
     }
 }

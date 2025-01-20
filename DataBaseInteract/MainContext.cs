@@ -11,12 +11,10 @@ namespace TopTalk.DataBaseInteract
 {
     public class MainContext : DbContext
     {
-        public DbSet<ChatInfo> Chats { get; set; }
+        public DbSet<Chat> Chats { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<User> UsersAndChats { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<TypeOfChat> ChatTypes { get; set; }
-        public DbSet<TypeOfUser> UserTypes { get; set; }
-        public DbSet<TypeOfMessage> MessageTypes { get; set; }
         public MainContext()
         {
             Database.EnsureCreated();
@@ -27,12 +25,9 @@ namespace TopTalk.DataBaseInteract
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasOne(u => u.UserType).WithMany().HasForeignKey(u => u.UserTypeId);
-            modelBuilder.Entity<ChatInfo>().HasOne(u => u.ChatType).WithMany().HasForeignKey(u => u.ChatTypeId);
-            modelBuilder.Entity<ChatInfo>().HasMany(u => u.Users).WithMany(u => u.Chats);
-            modelBuilder.Entity<Message>().HasOne(u => u.MessageType).WithMany().HasForeignKey(u => u.MessageTypeId);
+            modelBuilder.Entity<Chat>().HasMany(u => u.Users).WithMany(u => u.Chats);
             modelBuilder.Entity<Message>().HasOne(u => u.Chat).WithMany(u => u.Messages).HasForeignKey(u=>u.ChatId);
-
+            modelBuilder.Entity<User>().ToTable(t => t.HasCheckConstraint("ValidData", "Password AND Age < 120"));
         }
     }
 }

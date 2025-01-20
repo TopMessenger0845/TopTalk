@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TopTalk.Models
+namespace TopTalk.Enums
 {
-    public class TypeOfUser
+    public enum TypesOfUsers
     {
-        public int Id { get; set; }
-        public string Type {  get; set; }
+        Member,
+        Owner,
+        Listener
     }
 }
