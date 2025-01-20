@@ -13,6 +13,7 @@ namespace TopTalk.Models
         public int PasswordHash { get; set; }
         public int UserTypeId { get; set; }
         public ICollection<Chat> Chats { get; set; }
-        public TypesOfUsers UserType {  get; set; }
+        public int ContactsGroupId { get; set; }
+        public ContactGroup Contacts { get; set; }
     }
 }

@@ -32,7 +32,6 @@ namespace TopTalk.DataBaseInteract
                 {
                     Login = login,
                     PasswordHash = passwordHash,
-                    UserType = type
                 };
                 var users = db.Users.Where(u => u.Login == login && u.PasswordHash == passwordHash).Select(u => u);
                 if (users.Count() != 0)
