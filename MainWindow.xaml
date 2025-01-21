@@ -24,14 +24,20 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                
+                <!--Колонка для: списка контактов/чатов-->
                 <ColumnDefinition Width="Auto"/>
+
+                <!--Чат-->
                 <ColumnDefinition/>
+                
+                <!--Профиль-->
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            
+
             <!--Шапка-->
             <Border 
-                Background ="LightSeaGreen"
+                Background ="#db7944"
                 CornerRadius="20,20,0,0"
                 Grid.ColumnSpan="3"
                 Height="50"
@@ -60,12 +66,90 @@
                                 Style="{StaticResource IconButtonStyle}"/>
                         <Button x:Name="btnClose"
                                 Content="{StaticResource close}"
-                                Foreground="DarkRed"
                                 Click="btnClose_Click"
                                 Style="{StaticResource IconButtonStyle}"/>
                     </StackPanel>
                 </Grid>
             </Border>
+            
+            <!--Список чатов/контактов-->
+            <Grid Grid.Row="1" MinWidth="306" MaxWidth="406">
+                <Grid.RowDefinitions>
+                    
+                    <!--Название, параметры поиска и т. д.-->
+                    <RowDefinition Height="Auto"/>
+
+                    <!--Поиск-->
+                    <RowDefinition Height="Auto"/>
+                    
+                    <!--Статус-->
+                    <RowDefinition Height="Auto"/>
+
+                    <!--Список чатов-->
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <!--Название, параметры поиска и т. д.-->
+                <Grid Margin="15,0" Height="75">
+                    <Grid.ColumnDefinitions>
+
+                        <!--Название-->
+                        <ColumnDefinition Width="Auto"/>
+
+                        <!--Остальное-->
+                        <ColumnDefinition/>
+
+                        <!--Кнопка поиска-->
+                        <ColumnDefinition Width="40"/>
+
+                        <!--Кнопка показа остальных опций-->
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Chats"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        FontWeight="SemiBold"/>
+
+                    <!--Кнопка поиска-->
+                    <Button Grid.Column="2"
+                        x:Name="btnChatSearchButton"
+                        Content="{StaticResource search}"
+                        Style="{StaticResource IconButtonStyle}"/>
+                    
+                    <!--Остальные опции Popup Menu-->
+                    <ToggleButton Grid.Column="3"
+                        x:Name="btnMoreOptions"
+                        Content="{StaticResource more}"
+                        Style="{StaticResource ToggleIconButtonStyle}"/>
+                </Grid>
+                
+                <!--#region SearchBox-->
+                <!--To-Do: Add Search Box open/close triggers-->
+                <Border Grid.Row="1"
+                    x:Name="searchBoxBorder"
+                    Background="AntiqueWhite"
+                    CornerRadius="15"
+                    Margin="20"
+                    Height="50"
+                    FocusManager.FocusedElement="{Binding ElementName=searchQuery}">
+                    <!--FocusManager.FocusedElement="{Binding ElementName=searchQuery}"=> to focus our textbox when border gets focused..-->
+                    <TextBox
+                        x:Name="searchQuery"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Text="Текст для поиска"
+                        Padding="12, 0"
+                        VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center"/>
+                </Border>
+                <!--#endregion-->
+                
+                <!--#region Статус-->
+
+                <!--#endregion-->
+            </Grid>
         </Grid>
     </Border>
 </Window>

@@ -5,8 +5,6 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopTalk", "TopTalk.csproj", "{4F7B5694-B1A2-4A42-89BF-A3772D39CF5A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopTalk.Core", "TopTalk.Core\TopTalk.Core.csproj", "{F057FC2F-3B8F-4E5C-8E32-FFF0FE48D0A7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopNetwork", "Network.Core\TopNetwork.csproj", "{7B6F945E-8E5E-4F7F-89DF-44C8FD6F7F85}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{4F7B5694-B1A2-4A42-89BF-A3772D39CF5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F7B5694-B1A2-4A42-89BF-A3772D39CF5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F7B5694-B1A2-4A42-89BF-A3772D39CF5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F057FC2F-3B8F-4E5C-8E32-FFF0FE48D0A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F057FC2F-3B8F-4E5C-8E32-FFF0FE48D0A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F057FC2F-3B8F-4E5C-8E32-FFF0FE48D0A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F057FC2F-3B8F-4E5C-8E32-FFF0FE48D0A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7B6F945E-8E5E-4F7F-89DF-44C8FD6F7F85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B6F945E-8E5E-4F7F-89DF-44C8FD6F7F85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B6F945E-8E5E-4F7F-89DF-44C8FD6F7F85}.Release|Any CPU.ActiveCfg = Release|Any CPU
