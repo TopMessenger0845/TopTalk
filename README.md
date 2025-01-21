@@ -45,7 +45,7 @@
 | LoginRequest.cs | LoginResponse.cs |
 | RegisterRequest.cs | RegisterResponse.cs |
 
-### Note
-Íåêîòîðûå äîïîëíèòåëüíûå ôàéëû, êîòîðûå íå ñëåäóþò øàáëîíó `Request`/`Response`:
+### Примечание
+Некоторые дополнительные файлы, которые не соответствуют шаблону «Запрос/Ответ»:
 
 - **Chats**: AnswerOfInvitation.cs, InviteUserNotification.cs
