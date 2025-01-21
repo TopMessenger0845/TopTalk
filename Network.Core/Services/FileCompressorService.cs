@@ -1,6 +1,10 @@
-﻿
-namespace TopTalk.Services
+﻿namespace TopTalk.Core.Services
 {
+    public abstract class BaseFileCompressor
+    {
+        public abstract byte[] CompressFile(byte[] fileData);
+        public abstract byte[] DecompressFile(byte[] fileData);
+    }
     public class FileCompressorService : BaseFileCompressor
     {
         public override byte[] CompressFile(byte[] data)
