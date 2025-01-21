@@ -38,6 +38,12 @@
   <ItemGroup>
     <Folder Include="Assets\" />
     <Folder Include="Core\Templates\ItemTemplates\" />
+    <Folder Include="Core\Storage\" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="EntityFramework" Version="6.5.1" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
   </ItemGroup>
 
 </Project>
