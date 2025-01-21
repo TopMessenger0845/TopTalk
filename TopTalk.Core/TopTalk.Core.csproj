@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Scripts\" />
-    <Folder Include="Templates\ItemTemplates\" />
     <Folder Include="Templates\ItemTemplates\MessageBuilder\" />
   </ItemGroup>
 
