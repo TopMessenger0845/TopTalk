@@ -32,4 +32,8 @@
     <ProjectReference Include="TopTalk.Core\TopTalk.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+
 </Project>
