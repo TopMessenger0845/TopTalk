@@ -49,9 +49,8 @@ namespace TopTalkLogic.Core.Models
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
                     {
-                        if (!_authService.IsAuthClient(client))
-                            return _msgService.BuildMessage<ErroreMessageBuilder, ErroreData>(builder => 
-                                builder.SetPayload("Для использования данной операции авторизуйтесь."));
+                        if (CheckUserAuth(client, out var msgToUser))
+                            return msgToUser;
 
                         var requestData = CreateChatRequest.Parse(msg);
                         var chatId = await _dbService.RegisterNewChat(requestData.ChatName, requestData.ChatType, _authService.GetUserBy(client).Id);
@@ -63,7 +62,30 @@ namespace TopTalkLogic.Core.Models
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
                     {
-                        
+                        if (CheckUserAuth(client, out var msgToUser))
+                            return msgToUser;
+
+                        var requestData = SendMessageRequest.Parse(msg);
+                        Guid senderId = _authService.GetUserBy(client).Id;
+
+                        await _dbService.AddMessage(requestData.Message, senderId, requestData.ChatId);
+                        var users = await _dbService.GetAllUserByChat(requestData.ChatId);
+
+                        var chatHistory = await _dbService.GetMessagesByChatAsync(requestData.ChatId);
+                        var chatUpdatedMsg = _msgService.BuildMessage<ChatUpdateNotification, ChatUpdateNotificationData>(builder => builder.SetChatHistory(chatHistory));
+
+                        var tasks = new List<Task>();
+
+                        foreach (var user in users)
+                        {
+                            var userConnection = _authService.GetTopClientBy(user.User.Login);
+                            if (userConnection == null) continue;
+
+                            tasks.Add(userConnection.SendMessageAsync(chatUpdatedMsg));
+                        }
+
+                        await Task.WhenAll(tasks);
+
                         return null;
                     });
                 })
@@ -71,6 +93,9 @@ namespace TopTalkLogic.Core.Models
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
                     {
+                        if (CheckUserAuth(client, out var msgToUser))
+                            return msgToUser;
+
 
                         return null;
                     });
@@ -79,6 +104,9 @@ namespace TopTalkLogic.Core.Models
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
                     {
+                        if (CheckUserAuth(client, out var msgToUser))
+                            return msgToUser;
+
 
                         return null;
                     });
@@ -154,6 +182,20 @@ namespace TopTalkLogic.Core.Models
                     .SetPayload($"Невозможно обработать {msg.MessageType}.\n{ex.Message}")
                 );
             }
+        }
+
+        private bool CheckUserAuth(TopClient client, out Message? msg)
+        {
+            if (!_authService.IsAuthClient(client))
+            {
+                msg = _msgService.BuildMessage<ErroreMessageBuilder, ErroreData>(builder =>
+                    builder.SetPayload("Для использования данной операции авторизуйтесь."));
+
+                return false;
+            }
+
+            msg = null;
+            return true;
         }
     }
 }

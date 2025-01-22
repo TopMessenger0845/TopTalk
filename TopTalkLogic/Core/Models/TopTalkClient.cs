@@ -1,14 +1,16 @@
 ﻿
-using TopNetwork.Core;
 using TopNetwork.Services.MessageBuilder;
 using TopTalk.Core.Models.MessageBuilder.Chats;
-using TopTalk.Core.Models.MessageBuilder.Contacts;
 using TopTalk.Core.Models.MessageBuilder.Messages;
+using TopTalk.Core.Storage.Enums;
 
 namespace TopTalkLogic.Core.Models
 {
     public class TopTalkClient : BaseClient
     {
+        public event Action<CreateChatResponseData>? OnCreatedChat;
+        public event Action<ChatUpdateNotificationData>? OnChatUpdated;
+
         protected override void RegisterMessageBuilders()
         {
             MessageBuilderService
@@ -24,29 +26,24 @@ namespace TopTalkLogic.Core.Models
         protected override void RegisterMessageHandlers()
         {
             Handlers
-                .AddHandlerForMessageType(SendMessageResponseData.MsgType, async msg =>
+                .AddHandlerForMessageType(ChatUpdateNotificationData.MsgType, async msg =>
                 {
-
+                    try { OnChatUpdated?.Invoke(ChatUpdateNotification.Parse(msg)); }
+                    catch (Exception ex) { InvokeOnErroreOnClient(ex.Message); }
                     return null;
                 })
-                .AddHandlerForMessageType(DeleteMessageResponseData.MsgType, async msg =>
-                {
-
-                    return null;
-                })
-                .AddHandlerForMessageType(EditMessageResponseData.MsgType, async msg =>
-                {
-
-                    return null;
-                })
+                //.AddHandlerForMessageType(DeleteMessageResponseData.MsgType, async msg =>
+                //{
+                //    return null;
+                //})
+                //.AddHandlerForMessageType(EditMessageResponseData.MsgType, async msg =>
+                //{
+                //    return null;
+                //})
                 .AddHandlerForMessageType(CreateChatResponseData.MsgType, async msg =>
                 {
-
-                    return null;
-                })
-                .AddHandlerForMessageType(DeleteMessageResponseData.MsgType, async msg =>
-                {
-
+                    try { OnCreatedChat?.Invoke(CreateChatResponse.Parse(msg)); }
+                    catch(Exception ex) { InvokeOnErroreOnClient(ex.Message); }
                     return null;
                 })
                 .AddHandlerForMessageType(SubscriptionResponseData.MsgType, async msg =>
@@ -68,6 +65,14 @@ namespace TopTalkLogic.Core.Models
             await SendMessageAsync<SendMessageRequest, SendMessageRequestData>(builder => builder
                 .SetChatId(chatId)
                 .SetMessage(msg)
+            );
+        }
+
+        public async Task CreateChat(string name, TypesOfChats chatType)
+        {
+            await SendMessageAsync<CreateChatRequest, CreateChatRequestData>(builder => builder
+                .SetChatName(name)
+                .SetChatType(chatType)
             );
         }
         //public async Task DeleteMessage(Guid msgId)

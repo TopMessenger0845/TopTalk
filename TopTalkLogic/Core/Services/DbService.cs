@@ -146,5 +146,17 @@ namespace TopTalkLogic.Core.Services
             }
             finally { _semaphore.Release(); }
         }
+
+        public async Task<List<UserChatEntity>> GetAllUserByChat(Guid chatId)
+        {
+            await _semaphore.WaitAsync();
+            try
+            {
+                using var context = new MainContext();
+
+                return await context.UsersAndChats.Where(chatUser => chatUser.ChatId == chatId).ToListAsync();
+            }
+            finally { _semaphore.Release(); }
+        }
     }
 }

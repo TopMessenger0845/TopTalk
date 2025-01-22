@@ -30,6 +30,11 @@ public class CreateChatRequest : IMessageBuilder<CreateChatRequestData>
     {
         return new Message()
         {
+            Headers =
+            {
+                { nameof(CreateChatRequestData.ChatType), ((int)_data.ChatType).ToString() }
+            },
+            Payload = _data.ChatName,
             MessageType = _data.MessageType,
         };
     }
@@ -41,7 +46,8 @@ public class CreateChatRequest : IMessageBuilder<CreateChatRequestData>
 
         return new CreateChatRequestData()
         {
-            // Add properties initialization if needed
+            ChatName = msg.Payload,
+            ChatType = (TypesOfChats)int.Parse(msg.Headers[nameof(CreateChatRequestData.ChatType)])
         };
     }
 }

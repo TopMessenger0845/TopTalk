@@ -13,6 +13,7 @@
   <ItemGroup>
 	<PackageReference Include="EntityFramework" Version="6.5.1" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
+	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	<ProjectReference Include="..\Network.Core\TopNetwork.csproj" />
   </ItemGroup>
 
