@@ -1,4 +1,5 @@
-﻿namespace TopTalk.Core.Services.Managers
+﻿
+namespace TopTalk.Core.Services.Managers
 {
     //базовый абстрактный класс для управления данными в таблицах базы
     public abstract class EntitiesManagementService<T> where T : class

@@ -1,7 +1,4 @@
 ﻿using TopNetwork.Services;
-using TopTalk.Core.Storage.Models;
-using TopTalk.Core.Storage.DataBaseInteract;
-using Microsoft.EntityFrameworkCore;
 
 namespace TopTalk.Core.Services.Builders
 {

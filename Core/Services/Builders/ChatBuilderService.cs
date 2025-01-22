@@ -1,5 +1,4 @@
-﻿using TopTalk.Core.Storage.DataBaseInteract;
-using TopTalk.Core.Storage.Enums;
+﻿using TopTalk.Core.Storage.Enums;
 using TopTalk.Core.Storage.Models;
 
 namespace TopTalk.Core.Services.Builders

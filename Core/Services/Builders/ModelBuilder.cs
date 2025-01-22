@@ -1,5 +1,4 @@
-﻿
-using TopTalk.Core.Storage.Enums;
+﻿using TopTalk.Core.Storage.Enums;
 
 namespace TopTalk.Core.Services.Builders
 {
