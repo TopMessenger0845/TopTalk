@@ -11,7 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Talkersrsr\Network.Core\TopNetwork.csproj" />
+	<PackageReference Include="EntityFramework" Version="6.5.1" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
+	<ProjectReference Include="..\Network.Core\TopNetwork.csproj" />
   </ItemGroup>
 
 </Project>
