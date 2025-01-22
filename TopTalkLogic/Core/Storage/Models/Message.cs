@@ -3,7 +3,7 @@ namespace TopTalk.Core.Storage.Models
 {
     public class Message
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public DateTime Timestamp { get; set; }
         public int SenderId { get; set; }
         public User Sender { get; set; }

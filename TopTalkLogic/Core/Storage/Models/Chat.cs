@@ -5,7 +5,7 @@ namespace TopTalk.Core.Storage.Models
 {
     public class Chat
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public TypesOfChats ChatType { get; set; }
         public ICollection<Message>? Messages { get; set; }
