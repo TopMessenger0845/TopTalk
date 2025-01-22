@@ -59,16 +59,6 @@ namespace TopTalkLogic.Core.Models
                 {
 
                     return null;
-                })
-                .AddHandlerForMessageType(AddContactResponseData.MsgType, async msg =>
-                {
-
-                    return null;
-                })
-                .AddHandlerForMessageType(DeleteContactResponseData.MsgType, async msg =>
-                {
-
-                    return null;
                 });
         }
 
