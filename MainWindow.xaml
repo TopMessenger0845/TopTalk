@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TopTalk"
+        xmlns:customControls="clr-namespace:TopTalk.CustomControls"
         mc:Ignorable="d"
         x:Name="mainWindow" 
         AllowsTransparency="True"
@@ -37,7 +38,7 @@
 
             <!--Шапка-->
             <Border 
-                Background ="#db7944"
+                Background ="{DynamicResource PrimaryBackgroundColor}"
                 CornerRadius="20,20,0,0"
                 Grid.ColumnSpan="3"
                 Height="50"
@@ -146,8 +147,8 @@
                 </Border>
                 <!--#endregion-->
                 
-                <!--#region Статус-->
-
+                <!--#region Статусы-->
+                <customControls:StatusThumbs Grid.Row="2"/>
                 <!--#endregion-->
             </Grid>
         </Grid>
