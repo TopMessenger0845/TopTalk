@@ -1,155 +1,136 @@
 ﻿<Window x:Class="TopTalk.MainWindow"
+        xmlns:ctls="clr-namespace:WPFTasks.Controls" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TopTalk"
-        xmlns:customControls="clr-namespace:TopTalk.CustomControls"
+        xmlns:vm="clr-namespace:TopTalk.Core.ViewModels"
         mc:Ignorable="d"
         x:Name="mainWindow" 
-        AllowsTransparency="True"
-        Background="Transparent"
-        FontSize="15" 
-        Title="TopTalk" 
-        Height="768"
-        ResizeMode="NoResize"
-        Width="1250"
-        WindowStyle="None"
-        WindowStartupLocation="CenterScreen">
-    <!--Структура MainWindow-->
-    <Border CornerRadius="20" 
-            Background="WhiteSmoke">
+                Title="MainWindow" Height="600" Width="850"
+        WindowStartupLocation="CenterScreen" WindowStyle="None"
+        Background="Transparent" AllowsTransparency="True"
+        ResizeMode="CanResizeWithGrip" FontFamily="Poppins">
+    <Border Background="{DynamicResource PrimaryBackgroundColor}"
+            CornerRadius="8">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                
-                <!--Колонка для: списка контактов/чатов-->
                 <ColumnDefinition Width="Auto"/>
-
-                <!--Чат-->
-                <ColumnDefinition/>
-                
-                <!--Профиль-->
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!--Шапка-->
-            <Border 
-                Background ="{DynamicResource PrimaryBackgroundColor}"
-                CornerRadius="20,20,0,0"
-                Grid.ColumnSpan="3"
-                Height="50"
-                MouseDown="Border_MouseDown">
-                <Grid>
-                    <TextBlock
-                        Text="{Binding Title, ElementName=mainWindow}"
-                        HorizontalAlignment="Left"
-                        Margin="15, 0"
-                        VerticalAlignment="Center"
-                        Foreground="White"
-                        FontSize="22"
-                        FontWeight="Bold"/>
-                    <!--Кнопки для окна-->
-                    <StackPanel
-                        HorizontalAlignment="Right"
-                        Margin="10,0"
-                        Orientation="Horizontal">
-                        <Button x:Name="btnMinimize"
-                                Content="{StaticResource minimize}"
-                                Click="btnMinimize_Click"
-                                Style="{StaticResource IconButtonStyle}"/>
-                        <Button x:Name="btnMaximize"
-                                Content="{StaticResource maximize}"
-                                Click="btnMaximize_Click"
-                                Style="{StaticResource IconButtonStyle}"/>
-                        <Button x:Name="btnClose"
-                                Content="{StaticResource close}"
-                                Click="btnClose_Click"
-                                Style="{StaticResource IconButtonStyle}"/>
+            <Border Grid.Column="0"
+                    Background="{DynamicResource SecundaryBackgroundColor}"
+                    CornerRadius="8 0 0 8">
+                <Grid x:Name="GridNav" Width="60">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Border 
+                              Margin="14 0 0 0"
+                              Width="32" Height="24"
+                              HorizontalAlignment="Left">
+                            <Border.Background>
+                                <ImageBrush ImageSource="D:\MorozovArtur\TopTalk\logo.png" Stretch="Uniform"/>
+                            </Border.Background>
+                        </Border>
+
+                        <Label Content="WPF Tasks"
+                               Foreground="{DynamicResource PrimaryTextColor}"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="60 0 0 0"/>
+                    </Grid>
+
+                    <!-- Start: MenuItem -->
+                    <StackPanel Grid.Row="1" Margin="-1 20 0 20">
+                        <Button x:Name="btnTask1" Style="{DynamicResource PopupButtonStyle}"  MouseEnter="btnTask1_MouseEnter" MouseLeave="HidePopup" Click="btnTask1_Click">
+                            <ctls:MenuItem GroupName="MenuItem" IndicatorBrush="{DynamicResource PrimaryBlueColor}" Icon="{DynamicResource eye}" IconWidth="24" Text="Client" VerticalAlignment="Center"/>
+                        </Button>
+                        <Button x:Name="btnTask2" Style="{DynamicResource PopupButtonStyle}"  MouseEnter="btnTask2_MouseEnter" MouseLeave="HidePopup" Click="btnTask2_Click">
+                            <ctls:MenuItem GroupName="MenuItem" IndicatorBrush="{DynamicResource PrimaryBlueColor}" Icon="{DynamicResource dashboard}" IconWidth="24" Text="Server" VerticalAlignment="Center"/>
+                        </Button>
+                        <Button x:Name="btnSetting" Style="{DynamicResource PopupButtonStyle}"  MouseEnter="btnSetting_MouseEnter" MouseLeave="HidePopup" Click="btnSettings_Click">
+                            <ctls:MenuItem GroupName="MenuItem" IndicatorBrush="{DynamicResource PrimaryBlueColor}" Icon="{DynamicResource settings}" IconWidth="24" Text="Setting" VerticalAlignment="Center"/>
+                        </Button>
                     </StackPanel>
+                    <!-- End: MenuItem -->
+
+                    <!-- Start: Popup User Control -->
+                    <Popup x:Name="Popup"  AllowsTransparency="True"  HorizontalOffset="0" VerticalOffset="10">
+                        <ctls:UserPopup x:Name="Header" Foreground="{DynamicResource PrimaryTextColor}"/>
+                    </Popup>
+                    <!-- End: Popup User Control -->
+
                 </Grid>
             </Border>
-            
-            <!--Список чатов/контактов-->
-            <Grid Grid.Row="1" MinWidth="306" MaxWidth="406">
+
+            <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    
-                    <!--Название, параметры поиска и т. д.-->
-                    <RowDefinition Height="Auto"/>
-
-                    <!--Поиск-->
-                    <RowDefinition Height="Auto"/>
-                    
-                    <!--Статус-->
-                    <RowDefinition Height="Auto"/>
-
-                    <!--Список чатов-->
-                    <RowDefinition/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!--Название, параметры поиска и т. д.-->
-                <Grid Margin="15,0" Height="75">
-                    <Grid.ColumnDefinitions>
-
-                        <!--Название-->
-                        <ColumnDefinition Width="Auto"/>
-
-                        <!--Остальное-->
-                        <ColumnDefinition/>
-
-                        <!--Кнопка поиска-->
-                        <ColumnDefinition Width="40"/>
-
-                        <!--Кнопка показа остальных опций-->
-                        <ColumnDefinition Width="40"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Chats"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        FontSize="20"
-                        FontWeight="SemiBold"/>
-
-                    <!--Кнопка поиска-->
-                    <Button Grid.Column="2"
-                        x:Name="btnChatSearchButton"
-                        Content="{StaticResource search}"
-                        Style="{StaticResource IconButtonStyle}"/>
-                    
-                    <!--Остальные опции Popup Menu-->
-                    <ToggleButton Grid.Column="3"
-                        x:Name="btnMoreOptions"
-                        Content="{StaticResource more}"
-                        Style="{StaticResource ToggleIconButtonStyle}"/>
-                </Grid>
-                
-                <!--#region SearchBox-->
-                <!--To-Do: Add Search Box open/close triggers-->
-                <Border Grid.Row="1"
-                    x:Name="searchBoxBorder"
-                    Background="AntiqueWhite"
-                    CornerRadius="15"
-                    Margin="20"
-                    Height="50"
-                    FocusManager.FocusedElement="{Binding ElementName=searchQuery}">
-                    <!--FocusManager.FocusedElement="{Binding ElementName=searchQuery}"=> to focus our textbox when border gets focused..-->
-                    <TextBox
-                        x:Name="searchQuery"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Text="Текст для поиска"
-                        Padding="12, 0"
-                        VerticalAlignment="Stretch"
-                        VerticalContentAlignment="Center"/>
+                <ToggleButton x:Name="Tg_Btn" VerticalAlignment="Center" Style="{DynamicResource iToggleButtonStyle}" HorizontalAlignment="Left" BorderThickness="0" Background="Transparent" Margin="10,0,0,0" Height="30" Width="30">
+                    <ToggleButton.Triggers>
+                        <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                            <BeginStoryboard>
+                                <Storyboard x:Name="HideStackPanel">
+                                    <DoubleAnimation Storyboard.TargetName="GridNav" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="180" To="60" Duration="0:0:0.5">
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="ToggleButton.Checked">
+                            <BeginStoryboard>
+                                <Storyboard x:Name="ShowStackPanel">
+                                    <DoubleAnimation Storyboard.TargetName="GridNav" Storyboard.TargetProperty="Width" BeginTime="0:0:0" From="60" To="180" Duration="0:0:0.5">
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ToggleButton.Triggers>
+                </ToggleButton>
+                <Border 
+                    Background="{DynamicResource SecundaryBackgroundColor}"
+                    CornerRadius="12 12 0 0" Padding="10 6" HorizontalAlignment="Center" Margin="0 5 0 0"
+                    VerticalAlignment="Center" PreviewMouseLeftButtonDown="WindowMove">
+                    <Label Content="WPF-Tasks"
+                       Foreground="{DynamicResource PrimaryTextColor}"
+                       FontWeight="Bold"
+                       FontSize="24"
+                       Background="Transparent"/>
                 </Border>
-                <!--#endregion-->
-                
-                <!--#region Статусы-->
-                <customControls:StatusThumbs Grid.Row="2"/>
-                <!--#endregion-->
+                <!-- Start: Button Close | Restore | Minimize -->
+                <StackPanel Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,10,0" Height="30" Orientation="Horizontal" FlowDirection="RightToLeft">
+                    <Button x:Name="btnClose" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}" Click="btnClose_Click" Tag="IsCloseButton"/>
+                    <Button x:Name="btnRestore" Margin="5,0" Click="btnRestore_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource IconButtonsStyle}">
+                                <Setter Property="Content" Value="{DynamicResource maximize}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=home, Path=WindowState}" Value="Maximized">
+                                        <Setter Property="Content" Value="{DynamicResource restore}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button x:Name="btnMinimize" Style="{DynamicResource IconButtonsStyle}" Content="{DynamicResource minimize}" Click="btnMinimize_Click"/>
+                </StackPanel>
+                <!-- End: Button Close | Restore | Minimize -->
+
+                <Frame Grid.Row="1"
+                   Name="fContainer"
+                   Margin="10 -2 10 10"
+                   NavigationUIVisibility="Hidden">
+                </Frame>
             </Grid>
         </Grid>
     </Border>

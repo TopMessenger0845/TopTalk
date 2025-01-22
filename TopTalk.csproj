@@ -13,18 +13,22 @@
     <Compile Remove="Network.Core\**" />
     <Compile Remove="NetworkCore\**" />
     <Compile Remove="TopTalk.Core\**" />
+    <Compile Remove="TopTalkServer\**" />
     <EmbeddedResource Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <EmbeddedResource Remove="Network.Core\**" />
     <EmbeddedResource Remove="NetworkCore\**" />
     <EmbeddedResource Remove="TopTalk.Core\**" />
+    <EmbeddedResource Remove="TopTalkServer\**" />
     <None Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <None Remove="Network.Core\**" />
     <None Remove="NetworkCore\**" />
     <None Remove="TopTalk.Core\**" />
+    <None Remove="TopTalkServer\**" />
     <Page Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <Page Remove="Network.Core\**" />
     <Page Remove="NetworkCore\**" />
     <Page Remove="TopTalk.Core\**" />
+    <Page Remove="TopTalkServer\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +42,7 @@
   <ItemGroup>
     <Folder Include="Assets\" />
     <Folder Include="Core\Templates\ItemTemplates\" />
+    <Folder Include="Pages\" />
   </ItemGroup>
 
 </Project>

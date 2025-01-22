@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TopTalk.CustomControls
+namespace TopTalk.Core.Views
 {
     /// <summary>
-    /// Логика взаимодействия для StatusThumbs.xaml
+    /// Логика взаимодействия для RegisterWindow.xaml
     /// </summary>
-    public partial class StatusThumbs : UserControl
+    public partial class RegisterWindow : Page
     {
-        public StatusThumbs()
+        public RegisterWindow()
         {
             InitializeComponent();
         }
