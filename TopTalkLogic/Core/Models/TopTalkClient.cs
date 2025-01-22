@@ -83,12 +83,12 @@ namespace TopTalkLogic.Core.Models
         //        .SetMessageId(messageId)
         //    );
         //}
-        public async Task DeleteChat(Guid chatId)
-        {
-            await SendMessageAsync<DeleteChatRequest, DeleteChatRequestData>(builder => builder
-                .SetChatId(chatId)
-            );
-        }
+        //public async Task DeleteChat(Guid chatId)
+        //{
+        //    await SendMessageAsync<DeleteChatRequest, DeleteChatRequestData>(builder => builder
+        //        .SetChatId(chatId)
+        //    );
+        //}
         #endregion
     }
 }
