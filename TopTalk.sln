@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopTalk", "TopTalk.csproj",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopNetwork", "Network.Core\TopNetwork.csproj", "{7B6F945E-8E5E-4F7F-89DF-44C8FD6F7F85}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopTalkLogic", "TopTalkLogic\TopTalkLogic.csproj", "{168FD389-D5BB-47B4-BA3F-A37B644D6BBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7B6F945E-8E5E-4F7F-89DF-44C8FD6F7F85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B6F945E-8E5E-4F7F-89DF-44C8FD6F7F85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B6F945E-8E5E-4F7F-89DF-44C8FD6F7F85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{168FD389-D5BB-47B4-BA3F-A37B644D6BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{168FD389-D5BB-47B4-BA3F-A37B644D6BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{168FD389-D5BB-47B4-BA3F-A37B644D6BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{168FD389-D5BB-47B4-BA3F-A37B644D6BBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
