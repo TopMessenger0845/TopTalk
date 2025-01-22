@@ -1,6 +1,6 @@
 # Папка назначения для шаблонов
 $itemTemplatesPath = "$env:USERPROFILE\Documents\Visual Studio 2022\Templates\ItemTemplates\CSharp"
-$repositoryPath = "$(Get-Location)\Core\Templates"
+$repositoryPath = "$(Get-Location)\TopTalkLogic\Core\Templates"
 
 # Копируем шаблоны элементов
 if (Test-Path "$repositoryPath\ItemTemplates") {
