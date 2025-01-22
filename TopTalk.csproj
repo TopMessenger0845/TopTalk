@@ -9,25 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <Compile Remove="Network.Core\**" />
     <Compile Remove="NetworkCore\**" />
     <Compile Remove="TopTalk.Core\**" />
     <Compile Remove="TopTalkLogic\**" />
     <Compile Remove="TopTalkServer\**" />
-    <EmbeddedResource Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <EmbeddedResource Remove="Network.Core\**" />
     <EmbeddedResource Remove="NetworkCore\**" />
     <EmbeddedResource Remove="TopTalk.Core\**" />
     <EmbeddedResource Remove="TopTalkLogic\**" />
     <EmbeddedResource Remove="TopTalkServer\**" />
-    <None Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <None Remove="Network.Core\**" />
     <None Remove="NetworkCore\**" />
     <None Remove="TopTalk.Core\**" />
     <None Remove="TopTalkLogic\**" />
     <None Remove="TopTalkServer\**" />
-    <Page Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <Page Remove="Network.Core\**" />
     <Page Remove="NetworkCore\**" />
     <Page Remove="TopTalk.Core\**" />
@@ -45,8 +41,6 @@
 
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="Core\Templates\ItemTemplates\" />
-    <Folder Include="Core\Storage\" />
   </ItemGroup>
 
   <ItemGroup>
