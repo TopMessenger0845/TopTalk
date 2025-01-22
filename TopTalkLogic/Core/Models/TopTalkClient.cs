@@ -3,6 +3,7 @@ using TopNetwork.Services.MessageBuilder;
 using TopTalk.Core.Models.MessageBuilder.Chats;
 using TopTalk.Core.Models.MessageBuilder.Contacts;
 using TopTalk.Core.Models.MessageBuilder.Messages;
+using TopTalk.Core.Storage.Enums;
 
 namespace TopTalkLogic.Core.Models
 {
@@ -17,9 +18,7 @@ namespace TopTalkLogic.Core.Models
                 .Register(() => new CreateChatRequest())
                 .Register(() => new DeleteChatRequest())
                 .Register(() => new SubscriptionRequest())
-                .Register(() => new InviteUserRequest())
-                .Register(() => new AddContactRequest())
-                .Register(() => new DeleteContactRequest());
+                .Register(() => new InviteUserRequest());
         }
 
         protected override void RegisterMessageHandlers()
@@ -56,16 +55,6 @@ namespace TopTalkLogic.Core.Models
                     return null;
                 })
                 .AddHandlerForMessageType(InviteUserNotificationData.MsgType, async msg =>
-                {
-
-                    return null;
-                })
-                .AddHandlerForMessageType(AddContactResponseData.MsgType, async msg =>
-                {
-
-                    return null;
-                })
-                .AddHandlerForMessageType(DeleteContactResponseData.MsgType, async msg =>
                 {
 
                     return null;
