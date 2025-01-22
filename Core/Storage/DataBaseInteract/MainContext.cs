@@ -8,7 +8,7 @@ namespace TopTalk.Core.Storage.DataBaseInteract
     {
         public DbSet<Chat> Chats { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<User> UsersAndChats { get; set; }
+        public DbSet<UserChat> UsersAndChats { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<ContactGroup> Contacts { get; set; }
         public MainContext()
