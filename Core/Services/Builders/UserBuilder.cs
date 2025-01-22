@@ -2,10 +2,13 @@
 
 namespace TopTalk.Core.Services.Builders
 {
-    public class UserBuilderService
+    /// <summary>
+    /// Билдер отвечающий за создание объекта User
+    /// </summary>
+    public class UserBuilder
     {
         public IPasswordService passwordService;
-        public UserBuilderService()
+        public UserBuilder()
         {
             passwordService = new PasswordService();
         }

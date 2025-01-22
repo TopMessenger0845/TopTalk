@@ -26,6 +26,7 @@ namespace TopTalk.Core.Services
                         Chat = chat,
                         ChatId = chat.Id,
                     });
+                    db.SaveChanges();
                 }
             }
         }

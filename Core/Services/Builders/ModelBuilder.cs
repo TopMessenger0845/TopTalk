@@ -2,9 +2,8 @@
 
 namespace TopTalk.Core.Services.Builders
 {
-    public abstract class ModelBuilder<T> where T : class //не используется (пока что)
+    public abstract class ModelBuilder<T> where T : class //не используется (пока что), хотел чтобы его реализовывали наследники билдеры, но хз как реализовать
     {
-        public abstract T Build(T entity, string passwordHash);
-        public abstract T Build(T entity, string chatName, TypesOfChats chatType);
+        public abstract T Build();
     }
 }

@@ -3,7 +3,10 @@ using TopTalk.Core.Storage.Models;
 
 namespace TopTalk.Core.Services.Builders
 {
-    public class ChatBuilderService
+    /// <summary>
+    /// Билдер отвечающий за создание объекта Chat
+    /// </summary>
+    public class ChatBuilder
     {
         public Chat Build(string name, TypesOfChats typeOfChat, Storage.Models.User user)
         {
