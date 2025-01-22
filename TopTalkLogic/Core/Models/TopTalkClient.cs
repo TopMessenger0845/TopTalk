@@ -1,9 +1,10 @@
 ﻿
+using TopNetwork.Core;
 using TopNetwork.Services.MessageBuilder;
 using TopTalk.Core.Models.MessageBuilder.Chats;
 using TopTalk.Core.Models.MessageBuilder.Contacts;
 using TopTalk.Core.Models.MessageBuilder.Messages;
-using TopTalk.Core.Storage.Enums;
+using TopTalk.Core.Storage.Models;
 
 namespace TopTalkLogic.Core.Models
 {
@@ -58,6 +59,16 @@ namespace TopTalkLogic.Core.Models
                 {
 
                     return null;
+                })
+                .AddHandlerForMessageType(AddContactResponseData.MsgType, async msg =>
+                {
+
+                    return null;
+                })
+                .AddHandlerForMessageType(DeleteContactResponseData.MsgType, async msg =>
+                {
+
+                    return null;
                 });
         }
 
@@ -71,7 +82,20 @@ namespace TopTalkLogic.Core.Models
             );
         }
 
+        public async Task EditMessage(Guid messageId, string newMessage)
+        {
+            await SendMessageAsync<EditMessageRequest, EditMessageRequestData>(builder => builder
+                .SetNewMessage(newMessage)
+                .SetMessageId(messageId)
+            );
+        }
 
-        #endregion 
+        public async Task DeleteChat(Guid chatId)
+        {
+            await SendMessageAsync<DeleteChatRequest, DeleteChatRequestData>(builder => builder
+                .SetChatId(chatId)
+            );
+        }
+        #endregion
     }
 }
