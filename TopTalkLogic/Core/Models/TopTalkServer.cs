@@ -93,22 +93,6 @@ namespace TopTalkLogic.Core.Models
 
                         return null;
                     });
-                })
-                .AddHandlerForMessageType(AddContactRequestData.MsgType, async (client, msg, context) =>
-                {
-                    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
-                    {
-
-                        return null;
-                    });
-                })
-                .AddHandlerForMessageType(DeleteContactRequestData.MsgType, async (client, msg, context) =>
-                {
-                    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
-                    {
-
-                        return null;
-                    });
                 });
 
             _server.SetSessionFactory(SessionFactory);

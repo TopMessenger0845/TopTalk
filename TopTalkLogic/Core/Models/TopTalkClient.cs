@@ -4,7 +4,6 @@ using TopNetwork.Services.MessageBuilder;
 using TopTalk.Core.Models.MessageBuilder.Chats;
 using TopTalk.Core.Models.MessageBuilder.Contacts;
 using TopTalk.Core.Models.MessageBuilder.Messages;
-using TopTalk.Core.Storage.Models;
 
 namespace TopTalkLogic.Core.Models
 {
@@ -71,7 +70,12 @@ namespace TopTalkLogic.Core.Models
                 .SetMessage(msg)
             );
         }
-
+        public async Task DeleteMessage(Guid msgId)
+        {
+            await SendMessageAsync<DeleteMessageRequest, DeleteMessageRequestData>(builder => builder
+                .SetMessageId(msgId)
+            );
+        }
         public async Task EditMessage(Guid messageId, string newMessage)
         {
             await SendMessageAsync<EditMessageRequest, EditMessageRequestData>(builder => builder
@@ -79,7 +83,6 @@ namespace TopTalkLogic.Core.Models
                 .SetMessageId(messageId)
             );
         }
-
         public async Task DeleteChat(Guid chatId)
         {
             await SendMessageAsync<DeleteChatRequest, DeleteChatRequestData>(builder => builder
