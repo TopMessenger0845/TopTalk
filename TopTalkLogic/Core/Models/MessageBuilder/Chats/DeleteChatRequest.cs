@@ -14,6 +14,10 @@ public class DeleteChatRequest : IMessageBuilder<DeleteChatRequestData>
 {
     private DeleteChatRequestData _data = new();
 
+    public DeleteChatRequest SetChatId(Guid chatId)
+    {
+        _data.
+    }
     public Message BuildMsg()
     {
         return new Message()

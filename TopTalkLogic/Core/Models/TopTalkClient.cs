@@ -1,8 +1,10 @@
 ﻿
+using TopNetwork.Core;
 using TopNetwork.Services.MessageBuilder;
 using TopTalk.Core.Models.MessageBuilder.Chats;
 using TopTalk.Core.Models.MessageBuilder.Contacts;
 using TopTalk.Core.Models.MessageBuilder.Messages;
+using TopTalk.Core.Storage.Models;
 
 namespace TopTalkLogic.Core.Models
 {
@@ -17,9 +19,7 @@ namespace TopTalkLogic.Core.Models
                 .Register(() => new CreateChatRequest())
                 .Register(() => new DeleteChatRequest())
                 .Register(() => new SubscriptionRequest())
-                .Register(() => new InviteUserRequest())
-                .Register(() => new AddContactRequest())
-                .Register(() => new DeleteContactRequest());
+                .Register(() => new InviteUserRequest());
         }
 
         protected override void RegisterMessageHandlers()
@@ -82,7 +82,20 @@ namespace TopTalkLogic.Core.Models
             );
         }
 
+        public async Task EditMessage(Guid messageId, string newMessage)
+        {
+            await SendMessageAsync<EditMessageRequest, EditMessageRequestData>(builder => builder
+                .SetNewMessage(newMessage)
+                .SetMessageId(messageId)
+            );
+        }
 
-        #endregion 
+        public async Task DeleteChat(Guid chatId)
+        {
+            await SendMessageAsync<DeleteChatRequest, DeleteChatRequestData>(builder => builder
+                .SetChatId(chatId)
+            );
+        }
+        #endregion
     }
 }

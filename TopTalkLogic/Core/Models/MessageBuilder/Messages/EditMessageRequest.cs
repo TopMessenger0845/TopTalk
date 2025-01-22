@@ -6,6 +6,9 @@ namespace TopTalk.Core.Models.MessageBuilder.Messages;
 
 public class EditMessageRequestData : IMsgSourceData
 {
+    public Guid MessageId { get; set; }
+    public string NewMessage { get; set; } = string.Empty;
+
     public string MessageType => MsgType;
     public static string MsgType => "EditMessageRequest";
 }
@@ -14,11 +17,30 @@ public class EditMessageRequest : IMessageBuilder<EditMessageRequestData>
 {
     private EditMessageRequestData _data = new();
 
+    public EditMessageRequest SetMessageId(Guid id)
+    {
+        _data.MessageId = id;
+        return this;
+    }
+
+    public EditMessageRequest SetNewMessage(string message)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(message, nameof(message));
+
+        _data.NewMessage = message;
+        return this;
+    }
+
     public Message BuildMsg()
     {
         return new Message()
         {
+            Payload = _data.NewMessage,
             MessageType = _data.MessageType,
+            Headers =
+            {
+                {nameof(EditMessageRequestData.MessageId), _data.MessageId.ToString() }
+            },
         };
     }
 
@@ -29,7 +51,8 @@ public class EditMessageRequest : IMessageBuilder<EditMessageRequestData>
 
         return new EditMessageRequestData()
         {
-            // Add properties initialization if needed
+            NewMessage = msg.Payload,
+            MessageId = Guid.Parse(msg.Headers[nameof(EditMessageRequestData.MessageId)])
         };
     }
 }
