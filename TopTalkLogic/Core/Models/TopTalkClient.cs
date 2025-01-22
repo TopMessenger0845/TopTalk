@@ -70,25 +70,25 @@ namespace TopTalkLogic.Core.Models
                 .SetMessage(msg)
             );
         }
-        public async Task DeleteMessage(Guid msgId)
-        {
-            await SendMessageAsync<DeleteMessageRequest, DeleteMessageRequestData>(builder => builder
-                .SetMessageId(msgId)
-            );
-        }
-        public async Task EditMessage(Guid messageId, string newMessage)
-        {
-            await SendMessageAsync<EditMessageRequest, EditMessageRequestData>(builder => builder
-                .SetNewMessage(newMessage)
-                .SetMessageId(messageId)
-            );
-        }
-        public async Task DeleteChat(Guid chatId)
-        {
-            await SendMessageAsync<DeleteChatRequest, DeleteChatRequestData>(builder => builder
-                .SetChatId(chatId)
-            );
-        }
+        //public async Task DeleteMessage(Guid msgId)
+        //{
+        //    await SendMessageAsync<DeleteMessageRequest, DeleteMessageRequestData>(builder => builder
+        //        .SetMessageId(msgId)
+        //    );
+        //}
+        //public async Task EditMessage(Guid messageId, string newMessage)
+        //{
+        //    await SendMessageAsync<EditMessageRequest, EditMessageRequestData>(builder => builder
+        //        .SetNewMessage(newMessage)
+        //        .SetMessageId(messageId)
+        //    );
+        //}
+        //public async Task DeleteChat(Guid chatId)
+        //{
+        //    await SendMessageAsync<DeleteChatRequest, DeleteChatRequestData>(builder => builder
+        //        .SetChatId(chatId)
+        //    );
+        //}
         #endregion
     }
 }
