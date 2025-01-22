@@ -8,12 +8,20 @@ namespace TopTalk.Core.Services.Managers
     /// </summary>
     public class UsersManagementService : EntitiesManagementService<User>
     {
+        private object locker;
+        public UsersManagementService()
+        {
+            locker = new object();
+        }
         public override void Add(User entity)
         {
-            using (var db = new MainContext())
+            lock (locker)
             {
-                db.Users.Add(entity);
-                db.SaveChanges();
+                using (var db = new MainContext())
+                {
+                    db.Users.Add(entity);
+                    db.SaveChanges();
+                }
             }
         }
         public override User Get(int id)
@@ -38,10 +46,13 @@ namespace TopTalk.Core.Services.Managers
         }
         public override void Remove(User entity)
         {
-            using (var db = new MainContext())
+            lock (locker)
             {
-                db.Users.Remove(entity);
-                db.SaveChanges();
+                using (var db = new MainContext())
+                {
+                    db.Users.Remove(entity);
+                    db.SaveChanges();
+                }
             }
         }
     }

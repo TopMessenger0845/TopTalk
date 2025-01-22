@@ -8,12 +8,20 @@ namespace TopTalk.Core.Services.Managers
     /// </summary>
     public class ChatManagementService : EntitiesManagementService<Chat>
     {
+        private object locker;
+        public ChatManagementService()
+        {
+            locker = new object();
+        }
         public override void Add(Chat entity)
         {
-            using (var db = new MainContext())
+            lock (locker)
             {
-                db.Add(entity);
-                db.SaveChanges();
+                using (var db = new MainContext())
+                {
+                    db.Add(entity);
+                    db.SaveChanges();
+                }
             }
         }
         public override Chat Get(int id)
@@ -38,10 +46,13 @@ namespace TopTalk.Core.Services.Managers
         }
         public override void Remove(Chat entity)
         {
-            using (var db = new MainContext())
+            lock (locker)
             {
-                db.Chats.Remove(entity);
-                db.SaveChanges();
+                using (var db = new MainContext())
+                {
+                    db.Chats.Remove(entity);
+                    db.SaveChanges();
+                }
             }
         }
     }

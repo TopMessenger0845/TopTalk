@@ -6,9 +6,13 @@ namespace TopTalk.Core.Services
     /// <summary>
     /// Класс для связи пользователя и чата в базе данных
     /// </summary>
-    public class ConnectUserAndChat
+    public class ConnectUserAndChatService
     {
         private object locker;
+        public ConnectUserAndChatService()
+        {
+            locker = new object();
+        }
         public void Connect(User user, Chat chat)
         {
             lock (locker)//хз нужно ли тут удерживать поток если честно
