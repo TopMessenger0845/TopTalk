@@ -71,5 +71,18 @@ namespace TopTalkLogic.Core.Models
                     return null;
                 });
         }
+
+        #region Client Api
+
+        public async Task SendMessage(Guid chatId, string msg)
+        {
+            await SendMessageAsync<SendMessageRequest, SendMessageRequestData>(builder => builder
+                .SetChatId(chatId)
+                .SetMessage(msg)
+            );
+        }
+
+
+        #endregion 
     }
 }
