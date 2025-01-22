@@ -24,7 +24,7 @@ namespace TopTalk.Core.Services.Managers
                 }
             }
         }
-        public override User Get(int id)
+        public override User Get(Guid id)
         {
             User user = null;
             using (var db = new MainContext())

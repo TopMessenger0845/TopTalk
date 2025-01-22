@@ -24,7 +24,7 @@ namespace TopTalk.Core.Services.Managers
                 }
             }
         }
-        public override Chat Get(int id)
+        public override Chat Get(Guid id)
         {
             Chat chat = null;
             using (var db = new MainContext())

@@ -26,7 +26,7 @@ namespace TopTalk.Core.Storage.DataBaseInteract
             modelBuilder.Entity<ContactGroup>()
                 .HasOne(cg => cg.User)
                 .WithMany(u => u.ContactGroups)
-                .HasForeignKey(cg => cg.UserId);
+                .HasForeignKey(cg => cg);
             //пользователи и сообщения один ко многим
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Sender)

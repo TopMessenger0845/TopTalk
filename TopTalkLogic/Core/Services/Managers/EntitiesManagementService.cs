@@ -7,6 +7,6 @@ namespace TopTalk.Core.Services.Managers
         public abstract void Add(T entity);
         public abstract void Remove(T entity);
         public abstract ICollection<T> GetAll();
-        public abstract T Get(int id);
+        public abstract T Get(Guid id);
     }
 }
