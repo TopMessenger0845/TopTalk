@@ -10,4 +10,8 @@
     <Folder Include="Core\Templates\ItemTemplates\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Talkersrsr\Network.Core\TopNetwork.csproj" />
+  </ItemGroup>
+
 </Project>
