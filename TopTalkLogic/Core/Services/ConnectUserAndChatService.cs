@@ -13,13 +13,13 @@ namespace TopTalk.Core.Services
         {
             locker = new object();
         }
-        public void Connect(User user, Chat chat)
+        public void Connect(UserEntity user, ChatEntity chat)
         {
             lock (locker)//хз нужно ли тут удерживать поток если честно
             {
                 using (var db = new MainContext())
                 {
-                    db.UsersAndChats.Add(new UserChat()
+                    db.UsersAndChats.Add(new UserChatEntity()
                     {
                         User = user,
                         UserId = user.Id,

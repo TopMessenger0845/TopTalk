@@ -8,9 +8,9 @@ namespace TopTalk.Core.Services.Builders
     /// </summary>
     public class ChatBuilder
     {
-        public Chat Build(string name, TypesOfChats typeOfChat, Storage.Models.User user)
+        public ChatEntity Build(string name, TypesOfChats typeOfChat, Storage.Models.UserEntity user)
         {
-            Chat chat = new Chat()
+            ChatEntity chat = new ChatEntity()
             {
                 Name = name,
                 ChatType = typeOfChat

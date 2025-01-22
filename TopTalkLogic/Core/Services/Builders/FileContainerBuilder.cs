@@ -13,10 +13,10 @@ namespace TopTalk.Core.Services.Builders
         {
             fcs = new FileDataCompressorService();
         }
-        public FileContainer Build(byte[] originalData, string fileName)
+        public FileContainerEntity Build(byte[] originalData, string fileName)
         {
             byte[] compressedData = fcs.Compress(originalData);
-            FileContainer container = new FileContainer()
+            FileContainerEntity container = new FileContainerEntity()
             {
                 FileData = compressedData,
                 FileName = fileName

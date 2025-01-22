@@ -6,14 +6,14 @@ namespace TopTalk.Core.Services.Managers
     /// <summary>
     /// Класс для работы с таблицей пользователей, добавление, получение пользователей и тд.
     /// </summary>
-    public class UsersManagementService : EntitiesManagementService<User>
+    public class UsersManagementService : EntitiesManagementService<UserEntity>
     {
         private object locker;
         public UsersManagementService()
         {
             locker = new object();
         }
-        public override void Add(User entity)
+        public override void Add(UserEntity entity)
         {
             lock (locker)
             {
@@ -24,9 +24,9 @@ namespace TopTalk.Core.Services.Managers
                 }
             }
         }
-        public override User Get(Guid id)
+        public override UserEntity Get(int id)
         {
-            User user = null;
+            UserEntity user = null;
             using (var db = new MainContext())
             {
                 user = db.Users
@@ -35,16 +35,16 @@ namespace TopTalk.Core.Services.Managers
             }
             return user;
         }
-        public override ICollection<User> GetAll()
+        public override ICollection<UserEntity> GetAll()
         {
-            ICollection<User> users = null;
+            ICollection<UserEntity> users = null;
             using (var db = new MainContext())
             {
                 users = db.Users.ToList();
             }
             return users;
         }
-        public override void Remove(User entity)
+        public override void Remove(UserEntity entity)
         {
             lock (locker)
             {

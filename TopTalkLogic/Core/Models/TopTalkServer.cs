@@ -7,6 +7,8 @@ using TopTalk.Core.Models.MessageBuilder.Messages;
 using TopNetwork.Core;
 using TopTalk.Core.Models.MessageBuilder.Chats;
 using TopTalk.Core.Models.MessageBuilder.Contacts;
+using TopTalk.Core.Services.Builders;
+using TopTalkLogic.Core.Services;
 
 namespace TopTalkLogic.Core.Models
 {
@@ -18,7 +20,10 @@ namespace TopTalkLogic.Core.Models
                     .Register(() => new EndSessionNotificationMessageBuilder());
 
         private readonly TrackerUserActivityService _activityService;
+        private readonly DbService _dbService;
         private readonly RrServerHandlerBase _handlers;
+        private readonly DbAuthenticationService _authService;
+
         private RrServer _server = new();
 
         public EndPoint? EndPoint => _server.CurrentEndPoint;
@@ -31,13 +36,29 @@ namespace TopTalkLogic.Core.Models
             //_server.Logger = Logger.LogString;
 
             _activityService = new(_msgService);
+            _dbService = new DbService();
 
-            _server
-                .RegisterService(_msgService)
-                .RegisterService(_activityService);
-
+            _authService = _server
+               .RegisterService(_msgService)
+                .RegisterService(_activityService)
+                .RegisterService(_dbService)
+                .GetService<DbAuthenticationService>()!;
 
             _handlers = new RrServerHandlerBase()
+                .AddHandlerForMessageType(CreateChatRequestData.MsgType, async (client, msg, context) =>
+                {
+                    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
+                    {
+                        if (!_authService.IsAuthClient(client))
+                            return _msgService.BuildMessage<ErroreMessageBuilder, ErroreData>(builder => 
+                                builder.SetPayload("Для использования данной операции авторизуйтесь."));
+
+                        var requestData = CreateChatRequest.Parse(msg);
+                        var chatId = await _dbService.RegisterNewChat(requestData.ChatName, requestData.ChatType, _authService.GetUserBy(client).Id);
+
+                        return _msgService.BuildMessage<CreateChatResponse, CreateChatResponseData>(builder => builder.SetChatId(chatId));
+                    });
+                })
                 .AddHandlerForMessageType(SendMessageRequestData.MsgType, async (client, msg, context) =>
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>

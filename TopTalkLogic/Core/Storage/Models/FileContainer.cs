@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TopTalk.Core.Storage.Models
 {
-    public class FileContainer
+    public class FileContainerEntity
     {
         public Guid Id {  get; set; }
         public string FileName { get; set; }

@@ -6,14 +6,14 @@ namespace TopTalk.Core.Services.Managers
     /// <summary>
     /// Класс для работы с таблице чатов, добавление, получение чатов и тд
     /// </summary>
-    public class ChatManagementService : EntitiesManagementService<Chat>
+    public class ChatManagementService : EntitiesManagementService<ChatEntity>
     {
         private object locker;
         public ChatManagementService()
         {
             locker = new object();
         }
-        public override void Add(Chat entity)
+        public override void Add(ChatEntity entity)
         {
             lock (locker)
             {
@@ -24,9 +24,9 @@ namespace TopTalk.Core.Services.Managers
                 }
             }
         }
-        public override Chat Get(Guid id)
+        public override ChatEntity Get(int id)
         {
-            Chat chat = null;
+            ChatEntity chat = null;
             using (var db = new MainContext())
             {
                 chat = db.Chats
@@ -35,16 +35,16 @@ namespace TopTalk.Core.Services.Managers
             }
             return chat;
         }
-        public override ICollection<Chat> GetAll()
+        public override ICollection<ChatEntity> GetAll()
         {
-            ICollection<Chat> chats = null;
+            ICollection<ChatEntity> chats = null;
             using (var db = new MainContext())
             {
                 chats = db.Chats.ToList();
             }
             return chats;
         }
-        public override void Remove(Chat entity)
+        public override void Remove(ChatEntity entity)
         {
             lock (locker)
             {
