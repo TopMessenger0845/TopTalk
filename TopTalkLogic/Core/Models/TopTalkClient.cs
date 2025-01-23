@@ -14,6 +14,7 @@ namespace TopTalkLogic.Core.Models
         public event Action<AuthenticationResponseData>? OnAuthentication;
         public event Action<RegisterResponseData>? OnRegister;
 
+        public TopTalkClient() : base() { }
         protected override void RegisterMessageBuilders()
         {
             MessageBuilderService
@@ -23,10 +24,12 @@ namespace TopTalkLogic.Core.Models
                 .Register(() => new CreateChatRequest())
                 .Register(() => new DeleteChatRequest())
                 .Register(() => new SubscriptionRequest())
-                .Register(() => new InviteUserRequest());
+                .Register(() => new InviteUserRequest())
+                .Register(() => new RegisterRequest())
+                .Register(() => new AuthenticationRequestMessageBuilder());
         }
 
-        protected override void RegisterMessageHandlers()
+        protected override async void RegisterMessageHandlers()
         {
             Handlers
                 .AddHandlerForMessageType(ChatUpdateNotificationData.MsgType, async msg =>

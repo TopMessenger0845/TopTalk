@@ -31,9 +31,10 @@ namespace TopTalkLogic.Core.Models
         public LogString? logger;
 
 
-        public TopTalkServer(string? userFilePath = null)
+        public TopTalkServer(LogString? logger = null, string? userFilePath = null)
         {
             //_server.Logger = Logger.LogString;
+            _server.Logger = logger;
 
             _activityService = new(_msgService);
             _dbService = new DbService();
@@ -157,14 +158,7 @@ namespace TopTalkLogic.Core.Models
         }
 
 
-        public void SetEndPoint(IPEndPoint endPoint)
-            => _server.SetEndPoint(endPoint);
 
-        public async Task StartServer(CancellationToken token = default)
-            => await _server.StartAsync(token);
-
-        public async Task StopServer()
-            => await _server.StopAsync();
 
         private async Task<ClientSession?> SessionFactory(TopClient client, ServiceRegistry context, LogString? logger)
         {
@@ -174,8 +168,19 @@ namespace TopTalkLogic.Core.Models
             };
 
             _activityService.UpdateLastActive(client);
+            session.OnMessageHandled += Session_OnMessageHandled;
 
             return session;
+        }
+
+        private void Session_OnMessageHandled(ClientSession arg1, Message arg2)
+        {
+            try
+            {
+                _server?.Logger?.Invoke($"[Server]: Обработано сообщение типа [{arg2.MessageType}] от [{arg1.RemoteEndPoint}] ");
+                _activityService.UpdateLastActive(arg1.Client);
+            }
+            catch { }
         }
 
         private async Task<Message> SafeWrapperForHandler(TopClient client, Message msg, ServiceRegistry context, Func<TopClient, Message, ServiceRegistry, Task<Message?>> handler)
@@ -206,5 +211,14 @@ namespace TopTalkLogic.Core.Models
             msg = null;
             return true;
         }
+
+        public void SetEndPoint(IPEndPoint endPoint)
+            => _server.SetEndPoint(endPoint);
+
+        public async Task StartServer(CancellationToken token = default)
+            => await _server.StartAsync(token);
+
+        public async Task StopServer()
+            => await _server.StopAsync();
     }
 }

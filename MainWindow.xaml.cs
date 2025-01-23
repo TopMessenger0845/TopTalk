@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using TopTalk.ViewModels;
 
 
 namespace TopTalk
@@ -14,6 +15,7 @@ namespace TopTalk
         public MainWindow()
         {
             InitializeComponent();
+            TopTalkClientVm.Init();
         }
 
         private void BG_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

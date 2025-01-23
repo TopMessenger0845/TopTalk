@@ -9,8 +9,8 @@ namespace Server
         static async Task Main(string[] args)
         {
             IPEndPoint endPoint = new(IPAddress.Parse("127.0.0.1"), 5335);
+            TopTalkServer server = new TopTalkServer(msg => _ = ConsoleLogger.LogLine(msg));
 
-            TopTalkServer server = new TopTalkServer() { logger = msg => _ = ConsoleLogger.LogLine(msg) };
             server.SetEndPoint(endPoint);
 
             _ = server.StartServer();
