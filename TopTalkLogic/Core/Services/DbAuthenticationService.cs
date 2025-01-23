@@ -46,17 +46,17 @@ namespace TopTalkLogic.Core.Services
             {
                 if (_authenticatedSessions.Values.Any(s => s.Login == requestData.Login))
                 {
-                    return BuildFailedAuthResponse("Этот логин уже используется.");
+                    return BuildFailedAuthResponse("Этот логин уже используется.", requestData.Login);
                 }
 
                 var session = new ClientTimerSession(client, user, _maxSessionDuration, NotifySessionExpired);
                 client.OnConnectionLost += () => CloseSession(client);
 
                 _authenticatedSessions[client] = session;
-                return BuildSuccessAuthResponse();
+                return BuildSuccessAuthResponse(requestData.Login);
             }
 
-            return BuildFailedAuthResponse("Неверный логин или пароль.");
+            return BuildFailedAuthResponse("Неверный логин или пароль.", requestData.Login);
         }
 
         public async Task<Message?> RegisterClient(TopClient client, RegisterRequestData requestData)
@@ -116,15 +116,17 @@ namespace TopTalkLogic.Core.Services
             }
         }
 
-        private Message BuildSuccessAuthResponse() =>
+        private Message BuildSuccessAuthResponse(string login) =>
             _msgService.BuildMessage<AuthenticationResponseMessageBuilder, AuthenticationResponseData>(builder => builder
                 .SetAuthentication(true)
-                .SetExplanatoryMsg($"Вы успешно авторизовались!\nВаша сессия длится - {MaxSessionDuration.TotalMinutes} Мин."));
+                .SetExplanatoryMsg($"Вы успешно авторизовались!\nВаша сессия длится - {MaxSessionDuration.TotalMinutes} Мин.")
+                .SetLogin(login));
 
-        private Message BuildFailedAuthResponse(string reason) =>
+        private Message BuildFailedAuthResponse(string reason, string login) =>
             _msgService.BuildMessage<AuthenticationResponseMessageBuilder, AuthenticationResponseData>(builder => builder
                 .SetAuthentication(false)
-                .SetExplanatoryMsg(reason));
+                .SetExplanatoryMsg(reason)
+                .SetLogin(login));
     }
 
     public class ClientTimerSession

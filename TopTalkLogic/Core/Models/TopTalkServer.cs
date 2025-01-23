@@ -19,7 +19,8 @@ namespace TopTalkLogic.Core.Models
                     .Register(() => new ErroreMessageBuilder())
                     .Register(() => new EndSessionNotificationMessageBuilder())
                     .Register(() => new ChatUpdateNotification())
-                    .Register(() => new CreateChatResponse());
+                    .Register(() => new CreateChatResponse())
+                    .Register(() => new GetMyChatsResponse());
 
         private readonly TrackerUserActivityService _activityService;
         private readonly DbService _dbService;
@@ -79,6 +80,7 @@ namespace TopTalkLogic.Core.Models
                         var chatUpdatedMsg = _msgService.BuildMessage<ChatUpdateNotification, ChatUpdateNotificationData>(builder => builder.SetChatHistory(chatHistory).SetChatId(requestData.ChatId));
 
                         await client.SendMessageAsync(chatUpdatedMsg);
+
                         //var tasks = new List<Task>();
 
                         //foreach (var user in users)
@@ -92,6 +94,18 @@ namespace TopTalkLogic.Core.Models
                         //await Task.WhenAll(tasks);
 
                         return null;
+                    });
+                })
+                .AddHandlerForMessageType(GetMyChatsRequestData.MsgType, async (client, msg, context) =>
+                {
+                    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
+                    {
+                        if (CheckUserNotAuth(client, out var msgToUser))
+                            return msgToUser;
+
+                        var chatIds = (await _dbService.GetChatsByUser(_authService.GetUserBy(client).Id)).Select(chat => chat.Id).ToList();
+
+                        return _msgService.BuildMessage<GetMyChatsResponse, GetMyChatsResponseData>(builder => builder.SetChatHistory(chatIds));
                     });
                 })
                 .AddHandlerForMessageType(ChatHistoryRequestData.MsgType, async (client, msg, context) =>

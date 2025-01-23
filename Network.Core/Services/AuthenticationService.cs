@@ -43,13 +43,13 @@ namespace TopNetwork.Services
                 if (!await user.IsUserLoginPossibleAsync())
                 {
                     Logger?.Invoke($"[AuthenticationService]: Клиент [{client.LastUseEndPoint}] не может использовать логин {requestData.Login}.");
-                    return BuildFailedAuthResponse("Невозможно авторизоваться под этим логином.");
+                    return BuildFailedAuthResponse("Невозможно авторизоваться под этим логином.", requestData.Login);
                 }
                 
                 if (_authenticatedSessions.Values.Any(s => s.Login == requestData.Login))
                 {
                     Logger?.Invoke($"[AuthenticationService]: Логин {requestData.Login} уже используется другим пользователем.");
-                    return BuildFailedAuthResponse("Этот логин уже используется.");
+                    return BuildFailedAuthResponse("Этот логин уже используется.", requestData.Login);
                 }
 
                 var session = new ClientTimerSession<UserT>(client, user, _maxSessionDuration, NotifySessionExpired);
@@ -57,11 +57,11 @@ namespace TopNetwork.Services
 
                 _authenticatedSessions[client] = session;
                 Logger?.Invoke($"[AuthenticationService]: Клиент [{client.LastUseEndPoint}] успешно авторизован на {_maxSessionDuration.TotalMinutes} минут.");
-                return BuildSuccessAuthResponse();
+                return BuildSuccessAuthResponse(requestData.Login);
             }
 
             Logger?.Invoke($"[AuthenticationService]: Неверный логин или пароль от клиента [{client.LastUseEndPoint}].");
-            return BuildFailedAuthResponse("Неверный логин или пароль.");
+            return BuildFailedAuthResponse("Неверный логин или пароль.", requestData.Login);
         }
 
         public void CloseSession(TopClient client)
@@ -113,15 +113,17 @@ namespace TopNetwork.Services
             }
         }
 
-        private Message BuildSuccessAuthResponse() =>
+        private Message BuildSuccessAuthResponse(string login) =>
             _msgService.BuildMessage<AuthenticationResponseMessageBuilder, AuthenticationResponseData>(builder => builder
                 .SetAuthentication(true)
-                .SetExplanatoryMsg($"Вы успешно авторизовались!\nВаша сессия длится - {MaxSessionDuration.TotalMinutes} Мин."));
+                .SetExplanatoryMsg($"Вы успешно авторизовались!\nВаша сессия длится - {MaxSessionDuration.TotalMinutes} Мин.")
+                .SetLogin(login));
 
-        private Message BuildFailedAuthResponse(string reason) =>
+        private Message BuildFailedAuthResponse(string reason, string login) =>
             _msgService.BuildMessage<AuthenticationResponseMessageBuilder, AuthenticationResponseData>(builder => builder
                 .SetAuthentication(false)
-                .SetExplanatoryMsg(reason));
+                .SetExplanatoryMsg(reason)
+                .SetLogin(login));
     }
 
     public class ClientTimerSession<UserT> where UserT : User

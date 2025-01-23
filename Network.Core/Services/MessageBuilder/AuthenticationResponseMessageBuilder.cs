@@ -6,6 +6,7 @@ namespace TopNetwork.Services.MessageBuilder
     {
         public string Payload { get; set; } = string.Empty;
         public bool IsAuthenticated { get; set; } = false;
+        public string Login {  get; set; } = string.Empty;
 
         public string MessageType => MsgType;
         public static string MsgType => "AuthenticationResponse";
@@ -26,12 +27,22 @@ namespace TopNetwork.Services.MessageBuilder
             return this;
         }
 
+        public AuthenticationResponseMessageBuilder SetLogin(string login)
+        {
+            _data.Login = login;
+            return this;
+        }
+
         public Message BuildMsg()
         {
             return new()
             {
                 MessageType = _data.MessageType,
-                Headers = { { "IsAuthed", _data.IsAuthenticated!.ToString()! } },
+                Headers = 
+                { 
+                    { "IsAuthed", _data.IsAuthenticated!.ToString()! },
+                    { "Login", _data.Login }
+                },
                 Payload = _data.Payload
             };
         }
@@ -41,14 +52,12 @@ namespace TopNetwork.Services.MessageBuilder
             if (msg.MessageType != AuthenticationResponseData.MsgType)
                 throw new InvalidOperationException("Incorrect message type.");
 
-            if (msg.Headers.TryGetValue("IsAuthed", out var value))
-                return new()
-                {
-                    IsAuthenticated = bool.Parse(value),
-                    Payload = msg.Payload
-                };
-
-            throw new InvalidDataException("Нету заголовка IsAuthed");
+            return new()
+            {
+                IsAuthenticated = bool.Parse(msg.Headers["IsAuthed"]),
+                Payload = msg.Payload,
+                Login = msg.Headers["Login"]
+            };
         }
     }
 }

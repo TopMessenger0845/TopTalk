@@ -7,7 +7,7 @@ namespace TopTalk.ViewModels
 {
     public class LoginVm : BaseViewModel
     {
-        private readonly TopTalkClient _client;
+        private TopTalkClient? _client = null;
 
         private string _login;
         public string Login
@@ -28,14 +28,7 @@ namespace TopTalk.ViewModels
         public LoginVm()
         {
             LoginCommand = new RelayCommand(async () => await TryLogin());
-            _client = TopTalkClientVm.GetClient().Result;
-            _client.OnAuthentication += Client_OnAuthentication; ;
 
-        }
-
-        private void Client_OnAuthentication(TopNetwork.Services.MessageBuilder.AuthenticationResponseData obj)
-        {
-            MessageBox.Show(obj.Payload, obj.IsAuthenticated ? "Успешная авторизация" : "Ошибка авторизации", MessageBoxButton.OK, obj.IsAuthenticated ? MessageBoxImage.Information : MessageBoxImage.Error);
         }
 
         private async Task TryLogin()
@@ -51,6 +44,9 @@ namespace TopTalk.ViewModels
                 MessageBox.Show("Поле Password не должно быть пустым...", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
+
+            if(_client == null)
+                _client = await TopTalkClientVm.GetClient();
 
             await _client.Login(Login, Password);
         }

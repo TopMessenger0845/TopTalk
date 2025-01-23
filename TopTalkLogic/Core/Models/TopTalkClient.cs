@@ -16,21 +16,23 @@ namespace TopTalkLogic.Core.Models
         public event Action<AuthenticationResponseData>? OnAuthentication;
         public event Action<RegisterResponseData>? OnRegister;
         public event Action<EndSessionNotificationData>? OnEndSession;
+        public event Action<GetMyChatsResponseData>? OnGetMyChats;
         public TopTalkClient() : base() { }
         protected override void RegisterMessageBuilders()
         {
             MessageBuilderService
-                .Register(() => new SendMessageRequest())
-                .Register(() => new DeleteMessageRequest())
-                .Register(() => new EditMessageRequest())
-                .Register(() => new CreateChatRequest())
-                .Register(() => new DeleteChatRequest())
-                .Register(() => new SubscriptionRequest())
-                .Register(() => new InviteUserRequest())
-                .Register(() => new RegisterRequest())
-                .Register(() => new AuthenticationRequestMessageBuilder())
-                .Register(() => new ChatHistoryRequest())
-                .Register(() => new CloseSessionRequestMessageBuilder());
+                .Register(() => new DeleteMessageRequest())                     // Todo: Удаление сообщения
+                .Register(() => new EditMessageRequest())                       // Todo: Редактирование сообщения
+                .Register(() => new DeleteChatRequest())                        // Todo: Удаление чата 
+                .Register(() => new SubscriptionRequest())                      // Todo: Подписка на канал
+                .Register(() => new InviteUserRequest())                        // Todo: Пригласить пользователя в чат
+                .Register(() => new SendMessageRequest())                       // Отправка сообщения
+                .Register(() => new CreateChatRequest())                        // Создание чата 
+                .Register(() => new RegisterRequest())                          // Запрос на регистрацию
+                .Register(() => new AuthenticationRequestMessageBuilder())      // Запрос на авторизацию
+                .Register(() => new ChatHistoryRequest())                       // Запрос на получении истории чата
+                .Register(() => new CloseSessionRequestMessageBuilder())        // Закрыть сессию
+                .Register(() => new GetMyChatsRequest());                       // Запрос на получения Id чатов, в которых пользователь что то писал
         }
 
         protected override async void RegisterMessageHandlers()
@@ -61,6 +63,11 @@ namespace TopTalkLogic.Core.Models
                     Disconnect();
                     return await SafeWrapperForHandler(msg, async msg => 
                         OnEndSession?.Invoke(EndSessionNotificationMessageBuilder.Parse(msg)));
+                })
+                .AddHandlerForMessageType(GetMyChatsResponseData.MsgType, async msg =>
+                {
+                    return await SafeWrapperForHandler(msg, async msg =>
+                        OnGetMyChats?.Invoke(GetMyChatsResponse.Parse(msg)));
                 })
 
                 //.AddHandlerForMessageType(DeleteMessageResponseData.MsgType, async msg =>
@@ -135,7 +142,7 @@ namespace TopTalkLogic.Core.Models
 
         public async Task GetMyChats()
         {
-
+            await SendMessageAsync<GetMyChatsRequest, GetMyChatsRequestData>();
         }
 
         //public async Task DeleteMessage(Guid msgId)
@@ -164,7 +171,7 @@ namespace TopTalkLogic.Core.Models
         {
             try
             {
-                await handler?.Invoke(msg);
+                await handler?.Invoke(msg)!;
             }
             catch (Exception ex)
             {

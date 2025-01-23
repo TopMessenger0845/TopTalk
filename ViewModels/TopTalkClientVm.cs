@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Toolkit.Uwp.Notifications;
+using System.Text;
 using System.Windows;
 using TopTalkLogic.Core.Models;
 
@@ -45,13 +46,45 @@ namespace TopTalk.ViewModels
                 .AddCommand("/Connect", "/Connect", HandleConnect)
                 .AddCommand("/GotoChat", "/GotoChat <ChatId> - перейти в указаный чат", HandleGotoChat)
                 .AddCommand("/CreateChat", "/CreateChat <Title>", HandleCreateChat)
+                .AddCommand("/GetMyChats", "/GetMyChats - чаты, созданые вами", HandleGetMyChats)
             //    .AddCommand("/Delay", "/Delay <milliseconds>", HandleDelay)
                 .AddCommand("/SendMessage", "/SendMessage <message>", HandleSendMessage);
 
-            СonnectionStatus = "Статус подключения: " + (Client.IsConnected ? "подключено" : "не удалось установить соединение");
+            UpdateConnectionStatus();
 
             Client.OnChatUpdated += async data => await Client_OnChatUpdated(data);
             Client.OnCreatedChat += Client_OnCreatedChat;
+            Client.OnAuthentication += Client_OnAuthentication;
+            Client.OnGetMyChats += Client_OnGetMyChats;
+
+            Client.OnConnectionLost += UpdateConnectionStatus;
+        }
+
+        private void Client_OnGetMyChats(GetMyChatsResponseData obj)
+        {
+            StringBuilder sb = new();
+            if (obj.ChatIds.Count > 0)
+            {
+                for(int i = 0; i < obj.ChatIds.Count - 1; i++)
+                    sb.AppendLine(obj.ChatIds[i].ToString());
+
+                sb.Append(obj.ChatIds[^1]);
+            }
+            else
+            {
+                sb.Append("Вы не создали ни одного чата.\n");
+            }
+
+            AddMessage("AllYourChats", sb.ToString());
+        }
+
+        public void UpdateConnectionStatus()
+        {
+            СonnectionStatus = "Статус подключения: " + (Client.IsConnected ? "подключено" : "не удалось установить соединение");
+        }
+        private void Client_OnAuthentication(TopNetwork.Services.MessageBuilder.AuthenticationResponseData obj)
+        {
+            CurrentUser = obj.Login;
         }
 
         private void Client_OnCreatedChat(Core.Models.MessageBuilder.Chats.CreateChatResponseData obj)
@@ -83,6 +116,10 @@ namespace TopTalk.ViewModels
             else
                 ShowMessageBox("Команда /Authentication должна быть в формате: { /Authentication <Login> <Password> }");
         }
+        private async Task HandleGetMyChats(string input)
+        {
+            await Client.GetMyChats();
+        }
 
         private async Task HandleAuthentication(string input)
         {
@@ -99,22 +136,15 @@ namespace TopTalk.ViewModels
 
         private async Task HandleSendMessage(string input)
         {
-            var parts = input.Split(' ');
             if(_currentChatId == Guid.Empty)
             {
-                ShowMessageBox("ЗАйди в чат дурень чтоб отправлять сообщения!");
+                ShowMessageBox("Перейди в чат, чтоб отправлять сообщения.");
                 return;
             }
-            if (parts.Length == 2)
-            {
-                ArgumentException.ThrowIfNullOrWhiteSpace(parts[1]);
-                string content = input.Substring(input.IndexOf(" ") + 1);
-                await Client.SendMessage(_currentChatId, content);
-            }
-            else
-            {
-                ShowMessageBox("Команда /Authentication должна быть в формате: { /Authentication <Login> <Password> }");
-            }
+
+            string content = input.Substring(input.IndexOf(" ") + 1);
+            ArgumentException.ThrowIfNullOrWhiteSpace(content);
+            await Client.SendMessage(_currentChatId, content);
         }
 
         private async Task HandleCreateChat(string input)
@@ -157,7 +187,10 @@ namespace TopTalk.ViewModels
             AddMessage("Server", "Успешно подключились!"); 
         }
         private async Task HandleDisconnect(string input)
-            => Client.Disconnect();
+        {
+            Client.Disconnect();
+            UpdateConnectionStatus();
+        }
 
         #region Not touch
         public static async Task Init()
@@ -172,6 +205,9 @@ namespace TopTalk.ViewModels
                 Client.OnErroreOnClient += data => MessageBox.Show(data, "Ошибка на клиенте", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 new ToastContentBuilder().AddText("Connected to Server").AddText("Успешное подключение к серверу...").Show();
+
+                Client.OnRegister += data => Application.Current.Dispatcher.Invoke(() => MessageBox.Show(data.Payload));
+                Client.OnAuthentication += data => Application.Current.Dispatcher.Invoke(() => MessageBox.Show(data.Payload, data.IsAuthenticated ? "Успешная авторизация" : "Ошибка авторизации", MessageBoxButton.OK, data.IsAuthenticated ? MessageBoxImage.Information : MessageBoxImage.Error));
             }
             catch (Exception ex)
             {
