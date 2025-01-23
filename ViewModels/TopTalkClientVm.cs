@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.Toolkit.Uwp.Notifications;
-using System.Net;
 using System.Windows;
 using TopTalkLogic.Core.Models;
 
@@ -10,6 +9,8 @@ namespace TopTalk.ViewModels
     {
         private static SemaphoreSlim _semaphore = new(1, 1);
         public static TopTalkClient Client { get; set; }
+        private Guid _currentChatId; 
+
 
         public string _connectionStatus = "Статус подключения: ";
         public string СonnectionStatus
@@ -40,11 +41,36 @@ namespace TopTalk.ViewModels
                 .AddCommand("/SignOut", "/SignOut", HandleSignOut)
                 .AddCommand("/Disconnect", "/Disconnect", HandleDisconnect)
                 .AddCommand("/Clear", "/Clear", HandleClear)
-                .AddCommand("/Connect", "/Connect", HandleConnect);
+                .AddCommand("/Connect", "/Connect", HandleConnect)
+                .AddCommand("/GotoChat", "/GotoChat <ChatId> - перейти в указаный чат", HandleGotoChat);
             //    .AddCommand("/Delay", "/Delay <milliseconds>", HandleDelay)
             //    .AddCommand("/SendMessage", "/SendMessage <message>", HandleSendMessage);
 
             СonnectionStatus = "Статус подключения: " + (Client.IsConnected ? "подключено" : "не удалось установить соединение");
+
+            Client.OnChatUpdated += async data => await Client_OnChatUpdated(data);
+        }
+
+        private async Task Client_OnChatUpdated(ChatUpdateNotificationData obj)
+        {
+            if (obj.ChatIdUpdated == _currentChatId)
+            {
+                await HandleClear(string.Empty);
+
+                foreach(var msg in obj.UpdatedChatHistory)
+                    AddMessage(msg.Sender.Login, msg.Content);
+            }
+        }
+
+        private async Task HandleGotoChat(string input)
+        {
+            var parts = input.Split(' ');
+
+            if (parts.Length == 2) {
+                await Client.GetChatHistory(Guid.Parse(parts[1]));
+            }
+            else
+                ShowMessageBox("Команда /Authentication должна быть в формате: { /Authentication <Login> <Password> }");
         }
 
         private async Task HandleAuthentication(string input)

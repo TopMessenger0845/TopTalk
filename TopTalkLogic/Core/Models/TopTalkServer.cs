@@ -8,6 +8,7 @@ using TopNetwork.Core;
 using TopTalk.Core.Models.MessageBuilder.Chats;
 using TopTalkLogic.Core.Services;
 using TopTalk.Core.Models.MessageBuilder.Users;
+using TopTalkLogic.Core.Models.MessageBuilder.Chats;
 
 namespace TopTalkLogic.Core.Models
 {
@@ -88,6 +89,16 @@ namespace TopTalkLogic.Core.Models
                         await Task.WhenAll(tasks);
 
                         return null;
+                    });
+                })
+                .AddHandlerForMessageType(ChatHistoryRequestData.MsgType, async (client, msg, context) =>
+                {
+                    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
+                    {
+                        var requestData = ChatHistoryRequest.Parse(msg);
+                        var messages = await _dbService.GetMessagesByChatAsync(requestData.ChatId);
+
+                        return  _msgService.BuildMessage<ChatUpdateNotification, ChatUpdateNotificationData>(builder => builder.SetChatHistory(messages));
                     });
                 })
                 .AddHandlerForMessageType(RegisterRequestData.MsgType, async (client, msg, context) =>

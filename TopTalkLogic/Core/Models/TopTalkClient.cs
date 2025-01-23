@@ -5,6 +5,7 @@ using TopTalk.Core.Models.MessageBuilder.Chats;
 using TopTalk.Core.Models.MessageBuilder.Messages;
 using TopTalk.Core.Models.MessageBuilder.Users;
 using TopTalk.Core.Storage.Enums;
+using TopTalkLogic.Core.Models.MessageBuilder.Chats;
 
 namespace TopTalkLogic.Core.Models
 {
@@ -15,7 +16,6 @@ namespace TopTalkLogic.Core.Models
         public event Action<AuthenticationResponseData>? OnAuthentication;
         public event Action<RegisterResponseData>? OnRegister;
         public event Action<EndSessionNotificationData>? OnEndSession;
-
         public TopTalkClient() : base() { }
         protected override void RegisterMessageBuilders()
         {
@@ -28,7 +28,8 @@ namespace TopTalkLogic.Core.Models
                 .Register(() => new SubscriptionRequest())
                 .Register(() => new InviteUserRequest())
                 .Register(() => new RegisterRequest())
-                .Register(() => new AuthenticationRequestMessageBuilder());
+                .Register(() => new AuthenticationRequestMessageBuilder())
+                .Register(() => new ChatHistoryRequest());
         }
 
         protected override async void RegisterMessageHandlers()
@@ -124,6 +125,16 @@ namespace TopTalkLogic.Core.Models
         public async Task SendCloseSessionRequest()
         {
             await SendMessageAsync<CloseSessionRequestMessageBuilder, CloseSessionRequestData>();
+        }
+
+        public async Task GetChatHistory(Guid chatId)
+        {
+            await SendMessageAsync<ChatHistoryRequest, ChatHistoryRequestData>(builder => builder.SetChatId(chatId)); 
+        }
+
+        public async Task GetMyChats()
+        {
+
         }
 
         //public async Task DeleteMessage(Guid msgId)

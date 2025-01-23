@@ -11,7 +11,7 @@
 2. В командной строке выполните следующую команду для установки шаблонов:
 
    ```powershell
-   powershell.exe -NoProfile -ExecutionPolicy Bypass -File "./Core/Scripts/InstallTemplates.ps1"
+   powershell.exe -NoProfile -ExecutionPolicy Bypass -File "./TopTalkLogic/Core/Scripts/InstallTemplates.ps1"
 
 ## Chats
 
