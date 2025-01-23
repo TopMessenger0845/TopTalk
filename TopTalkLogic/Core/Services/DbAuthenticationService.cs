@@ -11,7 +11,10 @@ namespace TopTalkLogic.Core.Services
     public class DbAuthenticationService
     {
         private readonly SemaphoreSlim _sessionsLock = new(1, 1);
-        private readonly MessageBuilderService _msgService;
+        private readonly MessageBuilderService _msgService = new MessageBuilderService()
+            .Register(() => new ErroreMessageBuilder())
+            .Register(() => new AuthenticationResponseMessageBuilder())
+            .Register(() => new RegisterResponse());
         private readonly ConcurrentDictionary<TopClient, ClientTimerSession> _authenticatedSessions = new();
         private TimeSpan _maxSessionDuration = TimeSpan.FromHours(300);
 

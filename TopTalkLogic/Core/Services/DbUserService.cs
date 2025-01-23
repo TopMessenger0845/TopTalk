@@ -21,7 +21,7 @@ namespace TopTalkLogic.Core.Services
             if (await DbService.IsFreeLogin(login) == false)
                 throw new InvalidOperationException("Пользователь с таким логином уже существует.");
 
-            await DbService.RegisterUser(login, password);
+            await DbService.RegisterUser(login, PasswordService.HashPassword(password));
         }
 
         public async Task<UserEntity?> Authenticate(string login, string password)

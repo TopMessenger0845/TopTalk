@@ -1,29 +1,27 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using TopTalk.Core.Storage.Models;
 
 namespace TopTalk.Core.Storage.DataBaseInteract
 {
     public class MainContext : DbContext
     {
+        public static DbContextOptions options {  get; set; } = new DbContextOptionsBuilder<MainContext>().UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=TopTalkChat;Trusted_Connection=True;").Options;
         public DbSet<ChatEntity> Chats { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<UserChatEntity> UsersAndChats { get; set; }
         public DbSet<MessageEntity> Messages { get; set; }
-        public MainContext()
+        public MainContext() : base(options)
         {
             Database.EnsureCreated();
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=TopTalkChat;Trusted_Connection=True;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             // Настройка связи между ChatEntity и MessageEntity
-            modelBuilder.Entity<MessageEntity>()
+           modelBuilder.Entity<MessageEntity>()
                 .HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)
                 .HasForeignKey(m => m.ChatId)

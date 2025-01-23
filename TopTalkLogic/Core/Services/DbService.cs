@@ -1,7 +1,4 @@
-﻿
-using System.Data.Entity;
-using TopNetwork.Services;
-using TopTalk.Core.Storage.DataBaseInteract;
+﻿using TopTalk.Core.Storage.DataBaseInteract;
 using TopTalk.Core.Storage.Enums;
 using TopTalk.Core.Storage.Models;
 
@@ -17,7 +14,7 @@ namespace TopTalkLogic.Core.Services
             try
             {
                 using var context = new MainContext();
-                return await context.Messages.Where(msg => msg.ChatId == chatId).ToListAsync();
+                return context.Messages.Where(msg => msg.ChatId == chatId).ToList();
             }
             finally { _semaphore.Release(); }
         }
@@ -28,7 +25,7 @@ namespace TopTalkLogic.Core.Services
             try
             {
                 using var context = new MainContext();
-                return await context.UsersAndChats.Where(chatUser => chatUser.UserId == userId).Select(chat => chat.Chat).ToListAsync();
+                return context.UsersAndChats.Where(chatUser => chatUser.UserId == userId).Select(chat => chat.Chat).ToList();
             }
             finally { _semaphore.Release(); }
         }
@@ -149,7 +146,7 @@ namespace TopTalkLogic.Core.Services
             {
                 using var context = new MainContext();
 
-                return await context.Users.FirstOrDefaultAsync(x => x.Login == login);
+                return context.Users.FirstOrDefault(x => x.Login == login);
             }
             finally { _semaphore.Release(); }
         }
@@ -161,7 +158,7 @@ namespace TopTalkLogic.Core.Services
             {
                 using var context = new MainContext();
 
-                return await context.UsersAndChats.Where(chatUser => chatUser.ChatId == chatId).ToListAsync();
+                return context.UsersAndChats.Where(chatUser => chatUser.ChatId == chatId).ToList();
             }
             finally { _semaphore.Release(); }
         }
