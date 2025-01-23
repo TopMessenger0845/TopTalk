@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 
 
-namespace WPFTasks.Controls
+namespace TopTalk.Controls
 {
     /// <summary>
     /// Lógica de interacción para MenuItem.xaml

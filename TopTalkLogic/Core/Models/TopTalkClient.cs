@@ -75,6 +75,25 @@ namespace TopTalkLogic.Core.Models
                 .SetChatType(chatType)
             );
         }
+
+        public async Task Register(string login, string password)
+        {
+            await SendMessageAsync<AuthenticationRequestMessageBuilder, AuthenticationRequestData>(builder => builder
+                .SetLogin(login)
+                .SetPassword(password)
+            );
+        }
+
+        public async Task Login(string login, string password)
+        {
+            await SendMessageAsync<AuthenticationRequestMessageBuilder, AuthenticationRequestData>(builder => builder
+                .SetLogin(login)
+                .SetPassword(password)
+            );
+        }
+
+
+
         //public async Task DeleteMessage(Guid msgId)
         //{
         //    await SendMessageAsync<DeleteMessageRequest, DeleteMessageRequestData>(builder => builder

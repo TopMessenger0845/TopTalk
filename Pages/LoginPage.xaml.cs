@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TopTalk.Core.Views
+namespace TopTalk.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для RegisterWindow.xaml
+    /// Логика взаимодействия для LoginPage.xaml
     /// </summary>
-    public partial class RegisterWindow : Page
+    public partial class LoginPage : Page
     {
-        public RegisterWindow()
+        public LoginPage()
         {
             InitializeComponent();
         }

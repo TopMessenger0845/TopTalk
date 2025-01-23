@@ -1,7 +1,7 @@
-﻿using System.Windows.Controls;
+﻿
+using System.Windows.Controls;
 
-
-namespace WPFTasks.Controls
+namespace TopTalk.Controls
 {
     /// <summary>
     /// Lógica de interacción para UserPopup.xaml

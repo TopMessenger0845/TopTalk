@@ -12,7 +12,6 @@
     <Compile Remove="Network.Core\**" />
     <Compile Remove="NetworkCore\**" />
     <Compile Remove="TopTalk.Core\**" />
-    <EmbeddedResource Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <Compile Remove="TopTalkLogic\**" />
     <Compile Remove="TopTalkServer\**" />
     <EmbeddedResource Remove="Network.Core\**" />
@@ -20,13 +19,11 @@
     <EmbeddedResource Remove="TopTalk.Core\**" />
     <EmbeddedResource Remove="TopTalkLogic\**" />
     <EmbeddedResource Remove="TopTalkServer\**" />
-    <None Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <None Remove="Network.Core\**" />
     <None Remove="NetworkCore\**" />
     <None Remove="TopTalk.Core\**" />
     <None Remove="TopTalkLogic\**" />
     <None Remove="TopTalkServer\**" />
-    <Page Remove="Core\Templates\ItemTemplates\MessageBuilder\**" />
     <Page Remove="Network.Core\**" />
     <Page Remove="NetworkCore\**" />
     <Page Remove="TopTalk.Core\**" />
@@ -39,18 +36,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Network.Core\TopNetwork.csproj" />
+    <None Remove="logo.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Templates\ItemTemplates\" />
-    <Folder Include="Pages\" />
+    <ProjectReference Include="Network.Core\TopNetwork.csproj" />
+    <ProjectReference Include="TopTalkLogic\TopTalkLogic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Assets\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
   <ItemGroup>
 	  <PackageReference Include="EntityFramework" Version="6.5.1" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="logo.png" />
   </ItemGroup>
 
 </Project>

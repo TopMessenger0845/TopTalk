@@ -37,9 +37,9 @@ namespace TopTalk
         }
 
         // Start: MenuLeft PopupButton //
-        private void btnTask1_MouseEnter(object sender, MouseEventArgs e) => ShowPopup(btnTask1, "Client");
-        private void btnTask2_MouseEnter(object sender, MouseEventArgs e) => ShowPopup(btnTask2, "Server");
-        //private void btnTask3_MouseEnter(object sender, MouseEventArgs e) => ShowPopup(btnTask3, "Task 3");
+        private void btnTask1_MouseEnter(object sender, MouseEventArgs e) => ShowPopup(btnTask1, "Зарегистрироваться");
+        private void btnTask2_MouseEnter(object sender, MouseEventArgs e) => ShowPopup(btnTask2, "Войти");
+        private void btnTask3_MouseEnter(object sender, MouseEventArgs e) => ShowPopup(btnTask3, "TopTalk");
         //private void btnTask4_MouseEnter(object sender, MouseEventArgs e) => ShowPopup(btnTask4, "Task 4");
         //private void btnTask5_MouseEnter(object sender, MouseEventArgs e) => ShowPopup(btnTask5, "Task 5");
         private void btnSetting_MouseEnter(object sender, MouseEventArgs e) => ShowPopup(btnSetting, "Настройки");
@@ -68,13 +68,13 @@ namespace TopTalk
             => fContainer.Navigate(new System.Uri("Pages/Settings.xaml", UriKind.RelativeOrAbsolute));
 
         private void btnTask1_Click(object sender, RoutedEventArgs e)
-            => fContainer.Navigate(new System.Uri("Pages/ClientPage.xaml", UriKind.RelativeOrAbsolute));
+            => fContainer.Navigate(new System.Uri("Pages/RegisterPage.xaml", UriKind.RelativeOrAbsolute));
 
         private void btnTask2_Click(object sender, RoutedEventArgs e)
-            => fContainer.Navigate(new System.Uri("Pages/ServerPage.xaml", UriKind.RelativeOrAbsolute));
+            => fContainer.Navigate(new System.Uri("Pages/LoginPage.xaml", UriKind.RelativeOrAbsolute));
 
         private void btnTask3_Click(object sender, RoutedEventArgs e)
-            => fContainer.Navigate(new System.Uri("Pages/Task3.xaml", UriKind.RelativeOrAbsolute));
+            => fContainer.Navigate(new System.Uri("Pages/TopTalkClientPage.xaml", UriKind.RelativeOrAbsolute));
 
         private void btnTask4_Click(object sender, RoutedEventArgs e)
             => fContainer.Navigate(new System.Uri("Pages/Task4.xaml", UriKind.RelativeOrAbsolute));
