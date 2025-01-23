@@ -13,7 +13,7 @@ namespace TopTalkLogic.Core.Services
         private readonly SemaphoreSlim _sessionsLock = new(1, 1);
         private readonly MessageBuilderService _msgService;
         private readonly ConcurrentDictionary<TopClient, ClientTimerSession> _authenticatedSessions = new();
-        private TimeSpan _maxSessionDuration = TimeSpan.FromHours(3);
+        private TimeSpan _maxSessionDuration = TimeSpan.FromHours(300);
 
         public TimeSpan MaxSessionDuration => _maxSessionDuration;
         public int CountAuthConnections => _authenticatedSessions.Count;

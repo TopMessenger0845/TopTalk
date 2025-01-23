@@ -32,6 +32,13 @@ namespace TopTalk.ViewModels
         public RegisterVm()
         {
             RegisterCommand = new RelayCommand(async () => await TryRegister());
+
+            TopTalkClientVm.Client.OnRegister += Client_OnRegister;
+        }
+
+        private void Client_OnRegister(Core.Models.MessageBuilder.Users.RegisterResponseData obj)
+        {
+            MessageBox.Show(obj.Payload);
         }
 
         private async Task TryRegister()

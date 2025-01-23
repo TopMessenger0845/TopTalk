@@ -1,11 +1,14 @@
 ﻿
 using System.Windows;
 using System.Windows.Input;
+using TopTalkLogic.Core.Models;
 
 namespace TopTalk.ViewModels
 {
     public class LoginVm : BaseViewModel
     {
+        private readonly TopTalkClient _client;
+
         private string _login;
         public string Login
         {
@@ -25,12 +28,14 @@ namespace TopTalk.ViewModels
         public LoginVm()
         {
             LoginCommand = new RelayCommand(async () => await TryLogin());
-            TopTalkClientVm.Client.OnRegister += Client_OnRegister;
+            _client = TopTalkClientVm.GetClient().Result;
+            _client.OnAuthentication += Client_OnAuthentication; ;
+
         }
 
-        private void Client_OnRegister(Core.Models.MessageBuilder.Users.RegisterResponseData obj)
+        private void Client_OnAuthentication(TopNetwork.Services.MessageBuilder.AuthenticationResponseData obj)
         {
-            MessageBox.Show(obj.Payload);
+            MessageBox.Show(obj.Payload, obj.IsAuthenticated ? "Успешная авторизация" : "Ошибка авторизации", MessageBoxButton.OK, obj.IsAuthenticated ? MessageBoxImage.Information : MessageBoxImage.Error);
         }
 
         private async Task TryLogin()
@@ -47,7 +52,7 @@ namespace TopTalk.ViewModels
                 return;
             }
 
-            await TopTalkClientVm.Client.Login(Login, Password);
+            await _client.Login(Login, Password);
         }
     }
 }

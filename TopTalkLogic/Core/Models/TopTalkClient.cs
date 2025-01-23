@@ -1,4 +1,5 @@
 ﻿
+using TopNetwork.Core;
 using TopNetwork.Services.MessageBuilder;
 using TopTalk.Core.Models.MessageBuilder.Chats;
 using TopTalk.Core.Models.MessageBuilder.Messages;
@@ -13,6 +14,7 @@ namespace TopTalkLogic.Core.Models
         public event Action<ChatUpdateNotificationData>? OnChatUpdated;
         public event Action<AuthenticationResponseData>? OnAuthentication;
         public event Action<RegisterResponseData>? OnRegister;
+        public event Action<EndSessionNotificationData>? OnEndSession;
 
         public TopTalkClient() : base() { }
         protected override void RegisterMessageBuilders()
@@ -34,21 +36,29 @@ namespace TopTalkLogic.Core.Models
             Handlers
                 .AddHandlerForMessageType(ChatUpdateNotificationData.MsgType, async msg =>
                 {
-                    try { OnChatUpdated?.Invoke(ChatUpdateNotification.Parse(msg)); }
-                    catch (Exception ex) { InvokeOnErroreOnClient(ex.Message); }
-                    return null;
+                    return await SafeWrapperForHandler(msg, async msg =>
+                        OnChatUpdated?.Invoke(ChatUpdateNotification.Parse(msg)));
                 })
                 .AddHandlerForMessageType(RegisterResponseData.MsgType, async msg =>
                 {
-                    try { OnRegister?.Invoke(RegisterResponse.Parse(msg)); }
-                    catch (Exception ex) { InvokeOnErroreOnClient(ex.Message); }
-                    return null;
+                    return await SafeWrapperForHandler(msg, async msg =>
+                        OnRegister?.Invoke(RegisterResponse.Parse(msg)));
                 })
                 .AddHandlerForMessageType(AuthenticationResponseData.MsgType, async msg =>
                 {
-                    try { OnAuthentication?.Invoke(AuthenticationResponseMessageBuilder.Parse(msg)); }
-                    catch (Exception ex) { InvokeOnErroreOnClient(ex.Message); }
-                    return null;
+                    return await SafeWrapperForHandler(msg, async msg => 
+                        OnAuthentication?.Invoke(AuthenticationResponseMessageBuilder.Parse(msg)));
+                })
+                .AddHandlerForMessageType(ErroreData.MsgType, async msg =>
+                {
+                    return await SafeWrapperForHandler(msg, async msg => 
+                        InvokeOnErroreFromServer(ErroreMessageBuilder.Parse(msg)));
+                })
+                .AddHandlerForMessageType(EndSessionNotificationData.MsgType, async msg =>
+                {
+                    Disconnect();
+                    return await SafeWrapperForHandler(msg, async msg => 
+                        OnEndSession?.Invoke(EndSessionNotificationMessageBuilder.Parse(msg)));
                 })
 
                 //.AddHandlerForMessageType(DeleteMessageResponseData.MsgType, async msg =>
@@ -133,5 +143,20 @@ namespace TopTalkLogic.Core.Models
         //    );
         //}
         #endregion
+
+
+        private async Task<Message?> SafeWrapperForHandler(Message msg, Func<Message, Task> handler)
+        {
+            try
+            {
+                await handler?.Invoke(msg);
+            }
+            catch (Exception ex)
+            {
+                InvokeOnErroreOnClient($"Error parsing response of type: {msg.MessageType} - {ex.Message}");
+            }
+
+            return null;
+        }
     }
 }
