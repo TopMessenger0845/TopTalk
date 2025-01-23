@@ -6,6 +6,7 @@ namespace TopTalk.Core.Models.MessageBuilder.Chats;
 
 public class DeleteChatRequestData : IMsgSourceData
 {
+    public Guid ChatId { get; set; }
     public string MessageType => MsgType;
     public static string MsgType => "DeleteChatRequest";
 }
@@ -13,7 +14,11 @@ public class DeleteChatRequestData : IMsgSourceData
 public class DeleteChatRequest : IMessageBuilder<DeleteChatRequestData>
 {
     private DeleteChatRequestData _data = new();
-
+    public DeleteChatRequest SetChatId(Guid chatId)
+    {
+        _data.ChatId = chatId;
+        return this;    
+    }
     public Message BuildMsg()
     {
         return new Message()
