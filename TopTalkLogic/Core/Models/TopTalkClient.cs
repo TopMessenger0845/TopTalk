@@ -121,7 +121,10 @@ namespace TopTalkLogic.Core.Models
             );
         }
 
-
+        public async Task SendCloseSessionRequest()
+        {
+            await SendMessageAsync<CloseSessionRequestMessageBuilder, CloseSessionRequestData>();
+        }
 
         //public async Task DeleteMessage(Guid msgId)
         //{

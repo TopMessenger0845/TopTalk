@@ -98,6 +98,14 @@ namespace TopTalkLogic.Core.Models
                         return await _authService.RegisterClient(client, requestData); ;
                     });
                 })
+                .AddHandlerForMessageType(CloseSessionRequestData.MsgType, async (client, msg, context) =>
+                {
+                    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
+                    {
+                        _authService.CloseSession(client);
+                        return _msgService.BuildMessage<EndSessionNotificationMessageBuilder, EndSessionNotificationData>();
+                    });
+                })
                 .AddHandlerForMessageType(AuthenticationRequestData.MsgType, async (client, msg, context) =>
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>

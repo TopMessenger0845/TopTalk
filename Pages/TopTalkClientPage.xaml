@@ -23,9 +23,12 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Style="{StaticResource LabelTextStyle}" Text="{Binding СonnectionStatus, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Column="2" Margin="0 0 0 10" Text="{Binding СurrentСhat, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource LabelTextStyle}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Style="{StaticResource LabelTextStyle}" Text="{Binding CurrentUser, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="4" Margin="0 0 0 10" Text="{Binding СurrentСhat, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource LabelTextStyle}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
 
             <!-- Чат -->
