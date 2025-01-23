@@ -38,11 +38,13 @@ namespace TopTalk.ViewModels
             // Добавляем команды специфичные для ChatClient
             _commandProcessor!
                 .AddCommand("/Authentication", "/Authentication <Login> <Password>", HandleAuthentication)
+                .AddCommand("/Register" "/Register", )
                 .AddCommand("/SignOut", "/SignOut", HandleSignOut)
                 .AddCommand("/Disconnect", "/Disconnect", HandleDisconnect)
                 .AddCommand("/Clear", "/Clear", HandleClear)
                 .AddCommand("/Connect", "/Connect", HandleConnect)
-                .AddCommand("/GotoChat", "/GotoChat <ChatId> - перейти в указаный чат", HandleGotoChat);
+                .AddCommand("/GotoChat", "/GotoChat <ChatId> - перейти в указаный чат", HandleGotoChat)
+                .AddCommand("/CreateChat", "/CreateChat <Title>", );
             //    .AddCommand("/Delay", "/Delay <milliseconds>", HandleDelay)
             //    .AddCommand("/SendMessage", "/SendMessage <message>", HandleSendMessage);
 
@@ -68,6 +70,18 @@ namespace TopTalk.ViewModels
 
             if (parts.Length == 2) {
                 await Client.GetChatHistory(Guid.Parse(parts[1]));
+            }
+            else
+                ShowMessageBox("Команда /Authentication должна быть в формате: { /Authentication <Login> <Password> }");
+        }
+
+        private async Task HandleCreateChat(string input)
+        {
+            var parts = input.Split(' ');
+
+            if (parts.Length == 2)
+            {
+                await Client.CreateChat(input[1], );
             }
             else
                 ShowMessageBox("Команда /Authentication должна быть в формате: { /Authentication <Login> <Password> }");
