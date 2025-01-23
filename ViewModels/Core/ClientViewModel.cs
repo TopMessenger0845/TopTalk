@@ -27,7 +27,7 @@ namespace TopTalk.ViewModels
         {
             Client = client;
 
-            SendMessageCommand = new RelayCommand(async () => await SendMessageAsync(), CanSendMessage);
+            SendMessageCommand = new RelayCommand(async () => await SendMessageAsync(), () => true);
 
             Client.OnConnectionLost += () => AddMessage("Client", "Соединение потеряно.");
             Client.OnErroreOnClient += error => AddMessage("Client", $"Ошибка: {error}");

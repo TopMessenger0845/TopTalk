@@ -38,29 +38,36 @@ namespace TopTalk.ViewModels
             // Добавляем команды специфичные для ChatClient
             _commandProcessor!
                 .AddCommand("/Authentication", "/Authentication <Login> <Password>", HandleAuthentication)
-                .AddCommand("/Register" "/Register", )
+                .AddCommand("/Register", "/Register", HandleRegister)
                 .AddCommand("/SignOut", "/SignOut", HandleSignOut)
                 .AddCommand("/Disconnect", "/Disconnect", HandleDisconnect)
                 .AddCommand("/Clear", "/Clear", HandleClear)
                 .AddCommand("/Connect", "/Connect", HandleConnect)
                 .AddCommand("/GotoChat", "/GotoChat <ChatId> - перейти в указаный чат", HandleGotoChat)
-                .AddCommand("/CreateChat", "/CreateChat <Title>", );
+                .AddCommand("/CreateChat", "/CreateChat <Title>", HandleCreateChat)
             //    .AddCommand("/Delay", "/Delay <milliseconds>", HandleDelay)
-            //    .AddCommand("/SendMessage", "/SendMessage <message>", HandleSendMessage);
+                .AddCommand("/SendMessage", "/SendMessage <message>", HandleSendMessage);
 
             СonnectionStatus = "Статус подключения: " + (Client.IsConnected ? "подключено" : "не удалось установить соединение");
 
             Client.OnChatUpdated += async data => await Client_OnChatUpdated(data);
+            Client.OnCreatedChat += Client_OnCreatedChat;
+        }
+
+        private void Client_OnCreatedChat(Core.Models.MessageBuilder.Chats.CreateChatResponseData obj)
+        {
+            AddMessage("Server", $"Ваш чат успешно создан под Id: {obj.CreatedChatId}.");
         }
 
         private async Task Client_OnChatUpdated(ChatUpdateNotificationData obj)
         {
             if (obj.ChatIdUpdated == _currentChatId)
             {
+                СurrentСhat = obj.ChatIdUpdated.ToString();
                 await HandleClear(string.Empty);
 
                 foreach(var msg in obj.UpdatedChatHistory)
-                    AddMessage(msg.Sender.Login, msg.Content);
+                    AddMessage(msg.SenderId.ToString(), msg.Content);
             }
         }
 
@@ -69,19 +76,9 @@ namespace TopTalk.ViewModels
             var parts = input.Split(' ');
 
             if (parts.Length == 2) {
-                await Client.GetChatHistory(Guid.Parse(parts[1]));
-            }
-            else
-                ShowMessageBox("Команда /Authentication должна быть в формате: { /Authentication <Login> <Password> }");
-        }
-
-        private async Task HandleCreateChat(string input)
-        {
-            var parts = input.Split(' ');
-
-            if (parts.Length == 2)
-            {
-                await Client.CreateChat(input[1], );
+                Guid chatId = Guid.Parse(parts[1]);
+                _currentChatId = chatId;
+                await Client.GetChatHistory(chatId);
             }
             else
                 ShowMessageBox("Команда /Authentication должна быть в формате: { /Authentication <Login> <Password> }");
@@ -100,6 +97,50 @@ namespace TopTalk.ViewModels
             }
         }
 
+        private async Task HandleSendMessage(string input)
+        {
+            var parts = input.Split(' ');
+            if(_currentChatId == Guid.Empty)
+            {
+                ShowMessageBox("ЗАйди в чат дурень чтоб отправлять сообщения!");
+                return;
+            }
+            if (parts.Length == 2)
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(parts[1]);
+                string content = input.Substring(input.IndexOf(" ") + 1);
+                await Client.SendMessage(_currentChatId, content);
+            }
+            else
+            {
+                ShowMessageBox("Команда /Authentication должна быть в формате: { /Authentication <Login> <Password> }");
+            }
+        }
+
+        private async Task HandleCreateChat(string input)
+        {
+            var parts = input.Split(' ');
+            if (parts.Length == 2)
+            {
+                await Client.CreateChat(parts[1], Core.Storage.Enums.TypesOfChats.Public);
+            }
+            else
+            {
+                ShowMessageBox("Команда /CreateChat должна быть в формате: { /CreateChat <Title> }");
+            }
+        }
+        private async Task HandleRegister(string input)
+        {
+            var parts = input.Split(' ');
+            if (parts.Length == 3)
+            {
+                await Client.Register(parts[1], parts[2]);
+            }
+            else
+            {
+                ShowMessageBox("Команда /Authentication должна быть в формате: { /Authentication <Login> <Password> }");
+            }
+        }
         private async Task HandleSignOut(string input)
             => await Client.SendCloseSessionRequest();
 

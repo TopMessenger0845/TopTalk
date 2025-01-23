@@ -1,4 +1,5 @@
-﻿using TopTalk.Core.Storage.DataBaseInteract;
+﻿using Microsoft.EntityFrameworkCore;
+using TopTalk.Core.Storage.DataBaseInteract;
 using TopTalk.Core.Storage.Enums;
 using TopTalk.Core.Storage.Models;
 
@@ -14,7 +15,8 @@ namespace TopTalkLogic.Core.Services
             try
             {
                 using var context = new MainContext();
-                return context.Messages.Where(msg => msg.ChatId == chatId).ToList();
+                return context.Messages       // Загрузка данных об отправителе
+                .Where(msg => msg.ChatId == chatId).ToList();
             }
             finally { _semaphore.Release(); }
         }
@@ -42,6 +44,7 @@ namespace TopTalkLogic.Core.Services
                     ChatId = chatId,
                     SenderId = userId,
                     Timestamp = DateTime.UtcNow,
+                    Content = content
                 };
                 
                 await context.Messages.AddAsync(message);

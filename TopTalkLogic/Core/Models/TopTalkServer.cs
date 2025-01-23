@@ -17,7 +17,9 @@ namespace TopTalkLogic.Core.Models
         // Регистрация всех фабрик для типов сообщений отправляемых сервером 
         private static readonly MessageBuilderService _msgService = new MessageBuilderService()
                     .Register(() => new ErroreMessageBuilder())
-                    .Register(() => new EndSessionNotificationMessageBuilder());
+                    .Register(() => new EndSessionNotificationMessageBuilder())
+                    .Register(() => new ChatUpdateNotification())
+                    .Register(() => new CreateChatResponse());
 
         private readonly TrackerUserActivityService _activityService;
         private readonly DbService _dbService;
@@ -51,7 +53,7 @@ namespace TopTalkLogic.Core.Models
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
                     {
-                        if (CheckUserAuth(client, out var msgToUser))
+                        if (CheckUserNotAuth(client, out var msgToUser))
                             return msgToUser;
 
                         var requestData = CreateChatRequest.Parse(msg);
@@ -64,7 +66,7 @@ namespace TopTalkLogic.Core.Models
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
                     {
-                        if (CheckUserAuth(client, out var msgToUser))
+                        if (CheckUserNotAuth(client, out var msgToUser))
                             return msgToUser;
 
                         var requestData = SendMessageRequest.Parse(msg);
@@ -74,19 +76,20 @@ namespace TopTalkLogic.Core.Models
                         var users = await _dbService.GetAllUserByChat(requestData.ChatId);
 
                         var chatHistory = await _dbService.GetMessagesByChatAsync(requestData.ChatId);
-                        var chatUpdatedMsg = _msgService.BuildMessage<ChatUpdateNotification, ChatUpdateNotificationData>(builder => builder.SetChatHistory(chatHistory));
+                        var chatUpdatedMsg = _msgService.BuildMessage<ChatUpdateNotification, ChatUpdateNotificationData>(builder => builder.SetChatHistory(chatHistory).SetChatId(requestData.ChatId));
 
-                        var tasks = new List<Task>();
+                        await client.SendMessageAsync(chatUpdatedMsg);
+                        //var tasks = new List<Task>();
 
-                        foreach (var user in users)
-                        {
-                            var userConnection = _authService.GetTopClientBy(user.User.Login);
-                            if (userConnection == null) continue;
+                        //foreach (var user in users)
+                        //{
+                        //    var userConnection = _authService.GetTopClientBy(user.User.Login);
+                        //    if (userConnection == null) continue;
 
-                            tasks.Add(userConnection.SendMessageAsync(chatUpdatedMsg));
-                        }
+                        //    await userConnection.SendMessageAsync(chatUpdatedMsg);
+                        //}
 
-                        await Task.WhenAll(tasks);
+                        //await Task.WhenAll(tasks);
 
                         return null;
                     });
@@ -98,7 +101,7 @@ namespace TopTalkLogic.Core.Models
                         var requestData = ChatHistoryRequest.Parse(msg);
                         var messages = await _dbService.GetMessagesByChatAsync(requestData.ChatId);
 
-                        return  _msgService.BuildMessage<ChatUpdateNotification, ChatUpdateNotificationData>(builder => builder.SetChatHistory(messages));
+                        return  _msgService.BuildMessage<ChatUpdateNotification, ChatUpdateNotificationData>(builder => builder.SetChatHistory(messages).SetChatId(requestData.ChatId));
                     });
                 })
                 .AddHandlerForMessageType(RegisterRequestData.MsgType, async (client, msg, context) =>
@@ -210,25 +213,25 @@ namespace TopTalkLogic.Core.Models
             }
             catch (Exception ex)
             {
-                //Logger.LogString($"[Server]: Ошибка обработки {msg.MessageType} от [{client.RemoteEndPoint}].\n{ex.Message}");
+                logger?.Invoke($"[Server]: Ошибка обработки {msg.MessageType} от [{client.RemoteEndPoint}].\n{ex.Message}");
                 return _msgService.BuildMessage<ErroreMessageBuilder, ErroreData>(builder => builder
                     .SetPayload($"Невозможно обработать {msg.MessageType}.\n{ex.Message}")
                 );
             }
         }
 
-        private bool CheckUserAuth(TopClient client, out Message? msg)
+        private bool CheckUserNotAuth(TopClient client, out Message? msg)
         {
             if (!_authService.IsAuthClient(client))
             {
                 msg = _msgService.BuildMessage<ErroreMessageBuilder, ErroreData>(builder =>
                     builder.SetPayload("Для использования данной операции авторизуйтесь."));
 
-                return false;
+                return true;
             }
 
             msg = null;
-            return true;
+            return false;
         }
 
         public void SetEndPoint(IPEndPoint endPoint)
