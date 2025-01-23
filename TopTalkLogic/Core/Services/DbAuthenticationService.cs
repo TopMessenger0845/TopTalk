@@ -1,7 +1,9 @@
 ﻿
 using System.Collections.Concurrent;
 using TopNetwork.Core;
+using TopNetwork.RequestResponse;
 using TopNetwork.Services.MessageBuilder;
+using TopTalk.Core.Models.MessageBuilder.Users;
 using TopTalk.Core.Storage.Models;
 
 namespace TopTalkLogic.Core.Services
@@ -11,10 +13,11 @@ namespace TopTalkLogic.Core.Services
         private readonly SemaphoreSlim _sessionsLock = new(1, 1);
         private readonly MessageBuilderService _msgService;
         private readonly ConcurrentDictionary<TopClient, ClientTimerSession> _authenticatedSessions = new();
-        private TimeSpan _maxSessionDuration = TimeSpan.FromMinutes(3);
+        private TimeSpan _maxSessionDuration = TimeSpan.FromHours(3);
 
         public TimeSpan MaxSessionDuration => _maxSessionDuration;
         public int CountAuthConnections => _authenticatedSessions.Count;
+        public LogString? Logger { get; set; }
 
         [Inject]
         public DbUserService UserService { get; set; }
@@ -51,6 +54,21 @@ namespace TopTalkLogic.Core.Services
             }
 
             return BuildFailedAuthResponse("Неверный логин или пароль.");
+        }
+
+        public async Task<Message?> RegisterClient(TopClient client, RegisterRequestData requestData)
+        {
+            try
+            {
+                await UserService.RegisterUser(requestData.Login, requestData.Password);
+                Logger?.Invoke($"[AuthenticationService]: Клиент [{client.LastUseEndPoint}] успешно зарегал нового пользователя, под логином - {requestData.Login}.");
+                return _msgService.BuildMessage<RegisterResponse, RegisterResponseData>(builder => builder.SetExplanatoryMsg($"Вы успешно зарегистрировали нового пользователя, под логином - {requestData.Login}."));
+            }
+            catch (Exception ex)
+            {
+                Logger?.Invoke($"[AuthenticationService]: Ошибка при регистрации Клиента - [{client.LastUseEndPoint}]; Errore: {ex.Message}");
+                return _msgService.BuildMessage<RegisterResponse, RegisterResponseData>(builder => builder.SetExplanatoryMsg($"Ошибка регистрации: {ex.Message}"));
+            }
         }
 
         public void CloseSession(TopClient client)

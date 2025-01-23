@@ -11,21 +11,25 @@
   <ItemGroup>
     <Compile Remove="Network.Core\**" />
     <Compile Remove="NetworkCore\**" />
+    <Compile Remove="Server\**" />
     <Compile Remove="TopTalk.Core\**" />
     <Compile Remove="TopTalkLogic\**" />
     <Compile Remove="TopTalkServer\**" />
     <EmbeddedResource Remove="Network.Core\**" />
     <EmbeddedResource Remove="NetworkCore\**" />
+    <EmbeddedResource Remove="Server\**" />
     <EmbeddedResource Remove="TopTalk.Core\**" />
     <EmbeddedResource Remove="TopTalkLogic\**" />
     <EmbeddedResource Remove="TopTalkServer\**" />
     <None Remove="Network.Core\**" />
     <None Remove="NetworkCore\**" />
+    <None Remove="Server\**" />
     <None Remove="TopTalk.Core\**" />
     <None Remove="TopTalkLogic\**" />
     <None Remove="TopTalkServer\**" />
     <Page Remove="Network.Core\**" />
     <Page Remove="NetworkCore\**" />
+    <Page Remove="Server\**" />
     <Page Remove="TopTalk.Core\**" />
     <Page Remove="TopTalkLogic\**" />
     <Page Remove="TopTalkServer\**" />

@@ -1,4 +1,5 @@
 ﻿
+using System.Windows;
 using System.Windows.Input;
 
 namespace TopTalk.ViewModels
@@ -23,18 +24,30 @@ namespace TopTalk.ViewModels
 
         public LoginVm()
         {
-            LoginCommand = new RelayCommand(_ => TryLogin(), _ => CanLogin());
+            LoginCommand = new RelayCommand(async () => await TryLogin());
+            TopTalkClientVm.Client.OnRegister += Client_OnRegister;
         }
 
-        private void TryLogin()
+        private void Client_OnRegister(Core.Models.MessageBuilder.Users.RegisterResponseData obj)
         {
-            
+            MessageBox.Show(obj.Payload);
         }
 
-        private bool CanLogin()
+        private async Task TryLogin()
         {
-            return !string.IsNullOrEmpty(Login) && !string.IsNullOrEmpty(Password);
+            if (string.IsNullOrWhiteSpace(Login))
+            {
+                MessageBox.Show("Поле Login не должно быть пустым...", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Password))
+            {
+                MessageBox.Show("Поле Password не должно быть пустым...", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            await TopTalkClientVm.Client.Login(Login, Password);
         }
     }
-
 }

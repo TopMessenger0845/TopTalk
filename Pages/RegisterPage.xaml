@@ -64,25 +64,31 @@
                      Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
 
-            <!-- Кнопки -->
-            <Grid Grid.Row="2" HorizontalAlignment="Center">
+            <Grid Grid.Row="2" HorizontalAlignment="Stretch">
                 <Button Content="Зарегистрироваться" 
                     Command="{Binding RegisterCommand}" 
-                    Style="{StaticResource DarkButtonStyle}" Margin="0 5 0 0">
+                    Style="{StaticResource DarkButtonStyle}" HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch"
+                    Margin="0 5 0 0">
                     <Button.Triggers>
+                        <!-- Анимация на увеличение ширины -->
                         <EventTrigger RoutedEvent="Button.MouseEnter">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Width" 
-                                                 To="300" Duration="0:0:0.3"/>
+                                    <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                            To="0,5,0,5"
+                                            Duration="0:0:0.3" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
+
+                        <!-- Анимация на возврат ширины -->
                         <EventTrigger RoutedEvent="Button.MouseLeave">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetProperty="Width" 
-                                                 To="200" Duration="0:0:0.3"/>
+                                    <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                            To="50,5,50,5"
+                                            Duration="0:0:0.3" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>

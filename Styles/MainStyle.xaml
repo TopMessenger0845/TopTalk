@@ -13,6 +13,7 @@
         <Setter Property="Background" Value="{DynamicResource PrimaryBackgroundColor}"/>
         <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
     </Style>
+    
     <Style x:Key="DarkButtonStyle" TargetType="Button">
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="18"/>
@@ -21,7 +22,21 @@
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+
+        <!-- Триггеры -->
+        <Style.Triggers>
+            <!-- Наведение мыши -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <!-- Изменение фона на более светлый оттенок -->
+                <Setter Property="Background" Value="White"/>
+                <!-- Темно-серый -->
+                <!-- Изменение цвета текста (Foreground), если нужно -->
+                <Setter Property="Foreground" Value="Black"/>
+                <!-- Светло-серый -->
+            </Trigger>
+        </Style.Triggers>
     </Style>
+
 
     <!-- Start: Pop-up Button Style -->
     <Style x:Key="PopupButtonStyle" TargetType="{x:Type Button}">

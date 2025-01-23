@@ -2,6 +2,7 @@
 using TopNetwork.Services.MessageBuilder;
 using TopTalk.Core.Models.MessageBuilder.Chats;
 using TopTalk.Core.Models.MessageBuilder.Messages;
+using TopTalk.Core.Models.MessageBuilder.Users;
 using TopTalk.Core.Storage.Enums;
 
 namespace TopTalkLogic.Core.Models
@@ -10,6 +11,8 @@ namespace TopTalkLogic.Core.Models
     {
         public event Action<CreateChatResponseData>? OnCreatedChat;
         public event Action<ChatUpdateNotificationData>? OnChatUpdated;
+        public event Action<AuthenticationResponseData>? OnAuthentication;
+        public event Action<RegisterResponseData>? OnRegister;
 
         protected override void RegisterMessageBuilders()
         {
@@ -32,6 +35,19 @@ namespace TopTalkLogic.Core.Models
                     catch (Exception ex) { InvokeOnErroreOnClient(ex.Message); }
                     return null;
                 })
+                .AddHandlerForMessageType(RegisterResponseData.MsgType, async msg =>
+                {
+                    try { OnRegister?.Invoke(RegisterResponse.Parse(msg)); }
+                    catch (Exception ex) { InvokeOnErroreOnClient(ex.Message); }
+                    return null;
+                })
+                .AddHandlerForMessageType(AuthenticationResponseData.MsgType, async msg =>
+                {
+                    try { OnAuthentication?.Invoke(AuthenticationResponseMessageBuilder.Parse(msg)); }
+                    catch (Exception ex) { InvokeOnErroreOnClient(ex.Message); }
+                    return null;
+                })
+
                 //.AddHandlerForMessageType(DeleteMessageResponseData.MsgType, async msg =>
                 //{
                 //    return null;
@@ -78,7 +94,7 @@ namespace TopTalkLogic.Core.Models
 
         public async Task Register(string login, string password)
         {
-            await SendMessageAsync<AuthenticationRequestMessageBuilder, AuthenticationRequestData>(builder => builder
+            await SendMessageAsync<RegisterRequest, RegisterRequestData>(builder => builder
                 .SetLogin(login)
                 .SetPassword(password)
             );

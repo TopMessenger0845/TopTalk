@@ -21,7 +21,7 @@ namespace TopTalk.Core.ViewModels
 
         public MainViewModel()
         {
-            CloseCommand = new RelayCommand(_ => System.Windows.Application.Current.Shutdown());
+            //CloseCommand = new RelayCommand(_ => System.Windows.Application.Current.Shutdown());
             SwitchToLoginCommand = new RelayCommand(_ => SetLoginView());
             SwitchToRegisterCommand = new RelayCommand(_ => SetRegisterView());
 

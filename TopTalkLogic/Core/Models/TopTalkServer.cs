@@ -6,9 +6,8 @@ using TopNetwork.Services;
 using TopTalk.Core.Models.MessageBuilder.Messages;
 using TopNetwork.Core;
 using TopTalk.Core.Models.MessageBuilder.Chats;
-using TopTalk.Core.Models.MessageBuilder.Contacts;
-using TopTalk.Core.Services.Builders;
 using TopTalkLogic.Core.Services;
+using TopTalk.Core.Models.MessageBuilder.Users;
 
 namespace TopTalkLogic.Core.Models
 {
@@ -29,6 +28,7 @@ namespace TopTalkLogic.Core.Models
         public EndPoint? EndPoint => _server.CurrentEndPoint;
         public bool IsRunning => _server.IsRunning;
         public int CountOpenSessions => _server.CountOpenSessions;
+        public LogString? logger;
 
 
         public TopTalkServer(string? userFilePath = null)
@@ -89,44 +89,53 @@ namespace TopTalkLogic.Core.Models
                         return null;
                     });
                 })
-                .AddHandlerForMessageType(DeleteMessageRequestData.MsgType, async (client, msg, context) =>
+                .AddHandlerForMessageType(RegisterRequestData.MsgType, async (client, msg, context) =>
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
                     {
-                        if (CheckUserAuth(client, out var msgToUser))
-                            return msgToUser;
-
-
-                        return null;
+                        var requestData = RegisterRequest.Parse(msg);
+                        return await _authService.RegisterClient(client, requestData); ;
                     });
                 })
-                .AddHandlerForMessageType(EditMessageRequestData.MsgType, async (client, msg, context) =>
+                .AddHandlerForMessageType(AuthenticationRequestData.MsgType, async (client, msg, context) =>
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
                     {
-                        if (CheckUserAuth(client, out var msgToUser))
-                            return msgToUser;
-
-
-                        return null;
+                        var requestData = AuthenticationRequestMessageBuilder.Parse(msg);
+                        return await _authService.AuthenticateClient(client, requestData); ;
                     });
                 })
-                .AddHandlerForMessageType(CreateChatRequestData.MsgType, async (client, msg, context) =>
-                {
-                    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
-                    {
 
-                        return null;
-                    });
-                })
-                .AddHandlerForMessageType(DeleteChatRequestData.MsgType, async (client, msg, context) =>
-                {
-                    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
-                    {
+                //.AddHandlerForMessageType(DeleteMessageRequestData.MsgType, async (client, msg, context) =>
+                //{
+                //    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
+                //    {
+                //        if (CheckUserAuth(client, out var msgToUser))
+                //            return msgToUser;
 
-                        return null;
-                    });
-                })
+
+                //        return null;
+                //    });
+                //})
+                //.AddHandlerForMessageType(EditMessageRequestData.MsgType, async (client, msg, context) =>
+                //{
+                //    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
+                //    {
+                //        if (CheckUserAuth(client, out var msgToUser))
+                //            return msgToUser;
+
+
+                //        return null;
+                //    });
+                //})
+                //.AddHandlerForMessageType(DeleteChatRequestData.MsgType, async (client, msg, context) =>
+                //{
+                //    return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>
+                //    {
+
+                //        return null;
+                //    });
+                //})
                 .AddHandlerForMessageType(SubscriptionRequestData.MsgType, async (client, msg, context) =>
                 {
                     return await SafeWrapperForHandler(client, msg, context, async (client, msg, context) =>

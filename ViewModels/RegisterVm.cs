@@ -1,4 +1,5 @@
 ﻿
+using System.Windows;
 using System.Windows.Input;
 
 namespace TopTalk.ViewModels
@@ -30,19 +31,47 @@ namespace TopTalk.ViewModels
 
         public RegisterVm()
         {
-            RegisterCommand = new RelayCommand(_ => Register(), _ => CanRegister());
+            RegisterCommand = new RelayCommand(async () => await TryRegister());
         }
 
-        private void Register()
+        private async Task TryRegister()
         {
-            // Логика регистрации
-        }
+            if (string.IsNullOrWhiteSpace(Login))
+            {
+                MessageBox.Show("Поле Login не должно быть пустым...", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-        private bool CanRegister()
-        {
-            return !string.IsNullOrEmpty(Login)
-                && !string.IsNullOrEmpty(Password)
-                && Password == ConfirmPassword;
+            if (string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(ConfirmPassword))
+            {
+                MessageBox.Show("Поля для паролей не должно быть пустыми...", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var passw = Password.Trim();
+            var passwConf = ConfirmPassword.Trim();
+
+            var log = Login.Trim();
+
+            if (passw != passwConf)
+            {
+                MessageBox.Show("Пароли не совпадают...", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if(Password.Length < 8)
+            {
+                MessageBox.Show("Длина пароля от 8 символов...", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var result = MessageBox.Show($"Вся поля валидны. Вот так система видит логин и пароль.\nЛогин: {log}\nPassword: {passw}\n\n Создать аккаунт?", "Регистрация", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes) {
+                await TopTalkClientVm.Client.Register(log, passw);
+            } 
+            else {
+                MessageBox.Show("Создания аккаунта отменено...", "Регистрация", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }
