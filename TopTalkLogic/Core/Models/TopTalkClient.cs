@@ -29,7 +29,8 @@ namespace TopTalkLogic.Core.Models
                 .Register(() => new InviteUserRequest())
                 .Register(() => new RegisterRequest())
                 .Register(() => new AuthenticationRequestMessageBuilder())
-                .Register(() => new ChatHistoryRequest());
+                .Register(() => new ChatHistoryRequest())
+                .Register(() => new CloseSessionRequestMessageBuilder());
         }
 
         protected override async void RegisterMessageHandlers()
