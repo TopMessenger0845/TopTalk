@@ -18,7 +18,7 @@ namespace TopTalkLogic.Core.Services
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
                 throw new ArgumentException("Логин и пароль не могут быть пустыми.");
 
-            if (await DbService.IsFreeLogin(login))
+            if (await DbService.IsFreeLogin(login) == false)
                 throw new InvalidOperationException("Пользователь с таким логином уже существует.");
 
             await DbService.RegisterUser(login, password);

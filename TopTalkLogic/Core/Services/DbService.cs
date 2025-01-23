@@ -110,10 +110,17 @@ namespace TopTalkLogic.Core.Services
             try
             {
                 using var context = new MainContext();
-
-                return !context.Users.Any(x => x.Login == login);
+                //int result = !context.Users.Any(x => x.Login == login);
+                //return result;
+                int count = context.Users.Where(x=>x.Login == login).Count();
+                if (count == 0)
+                    return true;
+                else
+                    return false;
             }
+            catch(Exception ex) { }
             finally { _semaphore.Release(); }
+            return false;
         }
 
         public async Task RegisterUser(string login, string passwordHash)
